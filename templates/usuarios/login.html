@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head_content %}
+<title>Pupiplast Sign In</title>
+{% endblock %}
+
+{% block container %}
+
+    {% if error %}
+        <p class="alert alert-danger">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Nombre de Usuario" name="username">
+        </div>
+        
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Contraseña" name="password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-5">Iniciar Sesión</button>
+    </form>
+{% endblock %}
