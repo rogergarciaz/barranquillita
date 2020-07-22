@@ -22,6 +22,7 @@ from django.urls import path
 # Models
 from usuarios import views as usuarios_views
 from salarios import views as salarios_views
+from prestamos import views as prestamos_views
 
 
 urlpatterns = [
@@ -30,4 +31,6 @@ urlpatterns = [
     path('usuarios/logout/', usuarios_views.logout_view, name='logout'),
     path('usuarios/', usuarios_views.profile_view, name='profile'),
     path('salarios/produccion/', salarios_views.create_production, name='produccion'),
+    path('salarios/fijo/', salarios_views.create_assistance, name='asistencia'),
+    path('prestamos/', prestamos_views.create_loan, name='prestamo'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

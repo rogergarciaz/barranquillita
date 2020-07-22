@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head_content %}
-<title>Cargar Produccion</title>
+<title>Cargar Asistencia</title>
 {% endblock %}
 
 {% block container %}
@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col-6 pt-3 pb-3" id="profile-box">
-                <h4 class="mb-4">Carga la Producción!</h4>
+                <h4 class="mb-4">Carga la Asistencia!</h4>
 
                 <form method="POST" id="produc">
                     {% csrf_token %}
@@ -30,34 +30,6 @@
                         </div>
                     </div>
 
-                    {# Campo Descripcion #}
-                    <div class="form-group">
-
-                        <label for="Descripcion">Descripción:</label>
-                        <select name="descripcion" id="Descripcion" class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}">
-                            {% for descripcion in descripciones %}
-                                <option value="{{descripcion.pk}}">{{descripcion.nombre}}</option>
-                            {% endfor %}
-                        </select>
-
-                        <div class="invalid-feedback">
-                            {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Cantidad #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.cantidad.errors %}is-invalid{% endif %}"
-                            type="number"
-                            name="cantidad"
-                            placeholder="Cantidad"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.cantidad.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
                     {# Campo Precio #}
                     <div class="form-group">
                         <input
@@ -71,10 +43,13 @@
                         </div>
                     </div>
 
+                    {# Campo Usuario #}
+                    <input id="usuario" type="hidden" name="usuario">
+
                     {# Campo perfil #}
                     <div class="form-group">
                         <label for="Empleados">Escoge el empleado:</label>
-                        <select name="perfil" onchange="changeUser()" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
+                        <select name="perfil" onchange="changeUser" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
                             {% for usuario in usuarios %}
                                 <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
                             {% endfor %}
@@ -83,9 +58,6 @@
                             {% for error in form.perfil.errors %}{{ error }}{% endfor %}
                         </div>
                     </div>
-
-                    {# Campo Usuario #}
-                    <input id="usuario" type="hidden" name="usuario">
 
                     {# Campo Nota #}
                     <div class="form-group">
@@ -108,7 +80,7 @@
     </div>
 
     <script>
-        function changeUser() {
+        function changeUser(e) {
             document.getElementById("usuario").value = document.getElementById("Empleados").value;
         }
     </script>
