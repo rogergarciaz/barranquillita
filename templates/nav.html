@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg fixed-top" id="main-navbar">
     <div class="container">
         <a href="{% url 'profile' %}" style="border-right: 1px solid #efefef;" class="navbar-brand pr-5">
-            <img src="{% static 'img/instagram.png' %}" height="45" class="d-inline-block align-top"/>
+            <img src="{% static 'img/pupiplast.png' %}" height="45" class="d-inline-block align-top"/>
         </a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
@@ -17,7 +17,22 @@
                 </li>
                 <li class="nav-item nav-icon">
                     <a href="{% url 'produccion' %}">
-                        <i class="fas fa-plus"></i>
+                        <i class="fa fa-cogs"></i>
+                    </a>
+                </li>
+                <li class="nav-item nav-icon">
+                    <a href="{% url 'asistencia' %}">
+                        <i class="fa fa-address-book"></i>
+                    </a>
+                </li>
+                <li class="nav-item nav-icon">
+                    <a href="{% url 'produccion' %}">
+                        <i class="fa fa-credit-card"></i>
+                    </a>
+                </li>
+                <li class="nav-item nav-icon">
+                    <a href="{% url 'asistencia' %}">
+                        <i class="fa fa-cart-plus"></i>
                     </a>
                 </li>
                 <li class="nav-item nav-icon">

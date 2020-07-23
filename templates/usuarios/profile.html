@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block head_content %}
     <title>@{{ request.user }} | Perfil</title>
 {% endblock %}
@@ -7,46 +9,48 @@
 {% block container %}
     <div class="container">
         <div class="row justify-content-md-center">
-            <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+            <div class="col-6 pt-3 pb-3" id="profile-box">
+                <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
 
-                <div class="media">
-                    {% if perfil.foto %}
-                        <img src="{{ perfil.foto.url }}" class="rounded-circle" height="50" />
-                    {% else %}
-                        <img src="{ static 'img/default-profile.png' }" class="rounded-circle" height="50" />
-                    {% endif %}
-                    
-                    <div class="media-body">
-                        <h5 class="ml-4">@{{ usuario.username }} | {{ usuario.get_full_name }}</h5>
-                        <p class="ml-4"><input type="file" name="foto" required="true"></p>
+                    <div class="media">
+                        {% if perfil.foto %}
+                            <img src="{{ perfil.foto.url }}" class="rounded-circle" height="50" />
+                        {% else %}
+                            <img src="{% static 'img/default-profile.png' %}" class="rounded-circle" height="50" />
+                        {% endif %}
+                        
+                        <div class="media-body">
+                            <h5 class="ml-4">@{{ usuario.username }} | {{ usuario.get_full_name }}</h5>
+                            <p class="ml-4"><input type="file" name="foto" required="true"></p>
+                        </div>
                     </div>
-                </div>
 
-                {% for error in form.foto.errors %}
-                    <div class="alert alert-danger">
-                        <b>Foto: </b>{{ error }}
+                    {% for error in form.foto.errors %}
+                        <div class="alert alert-danger">
+                            <b>Foto: </b>{{ error }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <label>Celular</label>
+                        <input 
+                            class="form-control {% if form.celular.errors %}is-invalid{% endif %}"
+                            type="text"
+                            name="celular"
+                            placeholder="Celular"
+                            value="{% if form.errors %}{{ form.celular.value }}{% else %}{{ perfil.celular }}{% endif %}"
+                        />
+                        <div class="invalid-feedback">
+                            {% for error in form.celular.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                     </div>
-                {% endfor %}
 
-                <div class="form-group">
-                    <label>Celular</label>
-                    <input 
-                        class="form-control {% if form.celular.errors %}is-invalid{% endif %}"
-                        type="text"
-                        name="celular"
-                        placeholder="Celular"
-                        value="{% if form.errors %}{{ form.celular.value }}{% else %}{{ perfil.celular }}{% endif %}"
-                    />
-                    <div class="invalid-feedback">
-                        {% for error in form.celular.errors %}
-                            {{ error }}
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block mt-5" >Actualizar Información</button>
-            </form>
+                    <button type="submit" class="btn btn-primary btn-block mt-5" >Actualizar Información</button>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock %}
