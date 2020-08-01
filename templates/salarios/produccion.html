@@ -24,6 +24,7 @@
                             <option value="Peletizado">Peletizado</option>
                             <option value="Extrusion">Extrusion</option>
                             <option value="Sellado">Sellado</option>
+                            <option value="Fijos">Por día</option>
                         </select>
                         <div class="invalid-feedback">
                             {% for error in form.area.errors %}{{ error }}{% endfor %}
@@ -50,6 +51,7 @@
                         <input
                             class="form-control {% if form.cantidad.errors %}is-invalid{% endif %}"
                             type="number"
+                            step="any"
                             name="cantidad"
                             placeholder="Cantidad"
                         >
@@ -75,6 +77,7 @@
                     <div class="form-group">
                         <label for="Empleados">Escoge el empleado:</label>
                         <select name="perfil" onchange="changeUser()" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
+                            <option>----</option>
                             {% for usuario in usuarios %}
                                 <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
                             {% endfor %}

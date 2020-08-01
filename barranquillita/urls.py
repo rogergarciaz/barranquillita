@@ -23,6 +23,7 @@ from django.urls import path
 from usuarios import views as usuarios_views
 from salarios import views as salarios_views
 from prestamos import views as prestamos_views
+from sueldos import views as sueldos_views
 
 
 urlpatterns = [
@@ -33,4 +34,5 @@ urlpatterns = [
     path('salarios/produccion/', salarios_views.create_production, name='produccion'),
     path('salarios/fijo/', salarios_views.create_assistance, name='asistencia'),
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
+    path('sueldos/', sueldos_views.create_payment, name='nomina'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

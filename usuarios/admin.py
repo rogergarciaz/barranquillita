@@ -18,7 +18,6 @@ class PerfilAdmin(admin.ModelAdmin):
         ('Perfil', {
             'fields' : (
                 ('usuario', 'foto'),
-                ('usuario__first_name', 'usuario__last_name'),
             ),
         }),
         ('Informacion Extra', {

@@ -40,16 +40,16 @@
                         </div>
                     </div>
 
-                    {# Campo Cuotas Pagadas #}
+                    {# Campo Cuotas Debidas #}
                     <div class="form-group">
                         <input
-                            class="form-control {% if form.cuotas_pagadas.errors %}is-invalid{% endif %}"
+                            class="form-control {% if form.cuotas_debidas.errors %}is-invalid{% endif %}"
                             type="number"
-                            name="cuotas_pagadas."
-                            placeholder="Cantidad de cuotas pagadas"
+                            name="cuotas_debidas"
+                            placeholder="Cuotas por pagar"
                         >
                         <div class="invalid-feedback">
-                            {% for error in form.cuotas_pagadas.errors %}{{ error }}{% endfor %}
+                            {% for error in form.cuotas_debidas.errors %}{{ error }}{% endfor %}
                         </div>
                     </div>
 
@@ -58,7 +58,7 @@
                         <input
                             class="form-control {% if form.valor.errors %}is-invalid{% endif %}"
                             type="number"
-                            name="valor."
+                            name="valor"
                             placeholder="Valor del prestamo"
                         >
                         <div class="invalid-feedback">
@@ -72,7 +72,8 @@
                     {# Campo perfil #}
                     <div class="form-group">
                         <label for="Empleados">Escoge el empleado:</label>
-                        <select name="perfil" onchange="changeUser" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
+                        <select name="perfil" onchange="changeUser()" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
+                            <option>----</option>
                             {% for usuario in usuarios %}
                                 <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
                             {% endfor %}
@@ -90,7 +91,7 @@
     </div>
 
     <script>
-        function changeUser(e) {
+        function changeUser() {
             document.getElementById("usuario").value = document.getElementById("Empleados").value;
         }
     </script>

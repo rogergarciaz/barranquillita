@@ -24,6 +24,7 @@
                             <option value="Peletizado">Peletizado</option>
                             <option value="Extrusion">Extrusion</option>
                             <option value="Sellado">Sellado</option>
+                            <option value="Fijos">Por día</option>
                         </select>
                         <div class="invalid-feedback">
                             {% for error in form.area.errors %}{{ error }}{% endfor %}
@@ -36,7 +37,7 @@
                             class="form-control {% if form.precio_pagado.errors %}is-invalid{% endif %}"
                             type="number"
                             name="precio_pagado"
-                            placeholder="precio por unidad"
+                            placeholder="Pagado por día"
                         >
                         <div class="invalid-feedback">
                             {% for error in form.precio_pagado.errors %}{{ error }}{% endfor %}
@@ -49,7 +50,8 @@
                     {# Campo perfil #}
                     <div class="form-group">
                         <label for="Empleados">Escoge el empleado:</label>
-                        <select name="perfil" onchange="changeUser" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
+                        <select name="perfil" onchange="changeUser()" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
+                            <option>----</option>
                             {% for usuario in usuarios %}
                                 <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
                             {% endfor %}
@@ -80,7 +82,7 @@
     </div>
 
     <script>
-        function changeUser(e) {
+        function changeUser() {
             document.getElementById("usuario").value = document.getElementById("Empleados").value;
         }
     </script>

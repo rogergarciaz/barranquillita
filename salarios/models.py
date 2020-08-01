@@ -8,7 +8,7 @@ class Produccion(models.Model):
     perfil = models.ForeignKey('usuarios.Perfil', on_delete=models.CASCADE, default=None)
     descripcion = models.ForeignKey('sueldos.Descripcion', on_delete=models.CASCADE)
     area = models.CharField(max_length=20, blank=False, default=None)
-    cantidad = models.PositiveIntegerField(blank=False)
+    cantidad = models.FloatField(blank=False)
     precio_pagado = models.PositiveIntegerField(blank=False)
     nota = models.CharField(max_length=100, blank=True)
     creado = models.DateTimeField(auto_now_add=True)

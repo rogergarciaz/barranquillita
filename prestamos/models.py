@@ -7,15 +7,14 @@ class Prestamo(models.Model):
     perfil = models.ForeignKey('usuarios.Perfil', on_delete=models.CASCADE, default=None)
     descripcion = models.CharField(max_length=50, blank=False)
     cuotas = models.PositiveIntegerField(blank=False)
-    cuotas_pagadas = models.PositiveIntegerField(blank=False)
+    cuotas_debidas = models.PositiveIntegerField(blank=False)
     valor = models.PositiveIntegerField(blank=False)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        cantidad = self.cuotas - self.cuotas_pagadas
         valor = self.valor/self.cuotas
-        debe = valor*cantidad
+        debe = valor*self.cuotas_debidas
         return '{} {} debe {} de {}'.format(
             self.usuario.first_name,
             self.usuario.last_name,
