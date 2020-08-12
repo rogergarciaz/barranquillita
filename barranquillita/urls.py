@@ -35,4 +35,5 @@ urlpatterns = [
     path('salarios/fijo/', salarios_views.create_assistance, name='asistencia'),
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
+    path('prueba/', sueldos_views.NominaPDF.as_view(), name='prueba'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
