@@ -1,5 +1,6 @@
 import pytz
 import io
+import datetime
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Table, TableStyle
 from reportlab.lib import colors
@@ -28,16 +29,15 @@ class NominaPDF(View):
         # Fechas
         nomina_actual = Sueldo.objects.last()
         nomina_antigua = Sueldo.objects.filter(
-            sueldo=nomina_actual.sueldo,
-            creado__lte=nomina_actual.creado
-        )[0]
-        self.fechaI = nomina_antigua.creado
-        self.fechaF = timezone.now()
+            sueldo=nomina_actual.sueldo - 1
+        ).order_by('-id')[0]
+        self.fechaI = nomina_antigua.creado + datetime.timedelta(seconds=3)
+        self.fechaF = nomina_actual.creado
         desde = 'Del ' + self.fechaI.strftime("%Y-%m-%d") + ' al ' + self.fechaF.strftime("%Y-%m-%d")
         namefile = 'Nomina ' + self.fechaF.strftime("%Y-%m-%d") + '.pdf'
         pdf.setTitle(namefile)
         #Utilizamos el archivo pupiplast guardado en static
-        archivo_imagen = settings.MEDIA_FILES+'logo-pupi.png'
+        archivo_imagen = settings.MEDIA_FILES+'pupiplast.png'
         # ( "x" grandes es derecha - "y" grandes es arriba ) #
         #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
         pdf.drawImage(archivo_imagen, 15, 730, 120, 90, mask=[0,0,0,0,0,0], preserveAspectRatio=True)

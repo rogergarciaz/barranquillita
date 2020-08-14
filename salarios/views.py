@@ -1,10 +1,13 @@
 # Django
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from salarios.forms import ProductionForm, FijoForm
 from django.contrib.auth.models import User
+
 # Models
 from sueldos.models import Descripcion
+
+# Forms
+from salarios.forms import ProductionForm, FijoForm
 
 
 # Create your views here.

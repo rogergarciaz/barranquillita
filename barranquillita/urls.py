@@ -24,7 +24,7 @@ from usuarios import views as usuarios_views
 from salarios import views as salarios_views
 from prestamos import views as prestamos_views
 from sueldos import views as sueldos_views
-
+from ventas import views as ventas_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,5 +35,6 @@ urlpatterns = [
     path('salarios/fijo/', salarios_views.create_assistance, name='asistencia'),
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
+    path('ventas/', ventas_views.create_sale, name='venta'),
     path('prueba/', sueldos_views.NominaPDF.as_view(), name='prueba'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

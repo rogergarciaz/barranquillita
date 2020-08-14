@@ -19,7 +19,7 @@ class Produccion(models.Model):
             self.usuario.last_name,
             self.cantidad,
             self.descripcion.nombre,
-            self.creado
+            self.creado.strftime('%Y-%m-%d')
         )
 
 class Fijo(models.Model):
@@ -35,5 +35,5 @@ class Fijo(models.Model):
             self.usuario.first_name,
             self.usuario.last_name,
             self.precio_pagado,
-            self.creado
+            self.creado.strftime('%Y-%m-%d')
         )

@@ -13,4 +13,7 @@ class Perfil(models.Model):
     modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.usuario.username
+        return '{} tiene el número {}'.format(
+            self.usuario.username,
+            self.celular
+        )
