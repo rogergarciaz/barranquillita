@@ -2,11 +2,11 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
-class Venta(models.Model):
+class Compra(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     perfil = models.ForeignKey('usuarios.Perfil', on_delete=models.CASCADE, default=None)
-    cliente_id = models.ForeignKey('ventas.Cliente', on_delete=models.CASCADE, default=None)
-    descripcion = models.ForeignKey('sueldos.Descripcion', on_delete=models.CASCADE)
+    nombre = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE, default=None)
+    descripcion = models.ForeignKey('sueldos.Descripcion', on_delete=models.CASCADE, default=None)
     cantidad = models.FloatField(blank=False)
     precio_vendido = models.PositiveIntegerField(blank=False)
     nota = models.CharField(max_length=100, blank=True)
@@ -24,7 +24,6 @@ class Venta(models.Model):
         )
 
 class Cliente(models.Model):
-    cliente_id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100, blank=False)
     celular = models.CharField(max_length=20, blank=True)
     direccion = models.CharField(max_length=100, blank=True)
@@ -33,8 +32,4 @@ class Cliente(models.Model):
     modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'El cliente {} tiene el número {} y su direccion es {}'.format(
-            self.nombre,
-            self.celular,
-            self.direccion
-        )
+        return '{}'.format(self.nombre)

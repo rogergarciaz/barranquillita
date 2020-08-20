@@ -17,14 +17,14 @@
                     {# Campo Cliente #}
                     <div class="form-group">
                         <label for="Clientes">Escoge el Cliente:</label>
-                        <select name="cliente_id" id="Clientes" class="form-control {% if form.cliente_id.errors %}is-invalid{% endif %}">
+                        <select name="nombre" id="Clientes" class="form-control {% if form.nombre.errors %}is-invalid{% endif %}">
                             <option>----</option>
                             {% for cliente in clientes %}
-                                <option value="{{cliente.cliente_id}}">{{cliente.nombre}}</option>
+                                <option value="{{cliente.pk}}">{{cliente.nombre}}</option>
                             {% endfor %}
                         </select>
                         <div class="invalid-feedback">
-                            {% for error in form.cliente_id.errors %}{{ error }}{% endfor %}
+                            {% for error in form.nombre.errors %}{{ error }}{% endfor %}
                         </div>
                     </div>
 
@@ -33,6 +33,7 @@
 
                         <label for="Descripcion">Descripción:</label>
                         <select name="descripcion" id="Descripcion" class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}">
+                            <option>----</option>
                             {% for descripcion in descripciones %}
                                 <option value="{{descripcion.pk}}">{{descripcion.nombre}}</option>
                             {% endfor %}

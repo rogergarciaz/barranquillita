@@ -36,6 +36,7 @@
 
                         <label for="Descripcion">Descripción:</label>
                         <select name="descripcion" id="Descripcion" class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}">
+                            <option>----</option>
                             {% for descripcion in descripciones %}
                                 <option value="{{descripcion.pk}}">{{descripcion.nombre}}</option>
                             {% endfor %}
