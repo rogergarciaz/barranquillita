@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 
+
+{% load static %}
+
 {% block head_content %}
     <title>Prueba Formset</title>
     <style>
@@ -71,7 +74,7 @@
         <button type="submit" class="btn btn-primary btn-block mt-5">Cargar!</button>
     </form>
 
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
     <script>
         function add() {
             var form_idx = $('#id_form-TOTAL_FORMS').val();

@@ -12,4 +12,3 @@ class CompraForm(forms.ModelForm):
             'nombre', 'descripcion', 'cantidad',
             'precio_vendido', 'nota'
         )
-        # Acomodar el Form para el Template
