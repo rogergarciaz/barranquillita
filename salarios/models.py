@@ -12,6 +12,7 @@ class Produccion(models.Model):
     precio_pagado = models.PositiveIntegerField(blank=False)
     nota = models.CharField(max_length=100, blank=True)
     creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return '{} {} produjo {} de {} el {}'.format(
@@ -29,6 +30,7 @@ class Fijo(models.Model):
     precio_pagado = models.PositiveIntegerField(blank=False)
     nota = models.CharField(max_length=100, blank=True)
     creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return '{} {} hizo {} pesos el {}'.format(

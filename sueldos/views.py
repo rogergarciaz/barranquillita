@@ -17,6 +17,7 @@ from django.utils import timezone
 from django.views.generic import View
 from django.http import HttpResponse
 from django.conf import settings
+from django.forms.models import model_to_dict
 
 # Models
 from sueldos.models import Sueldo
@@ -113,11 +114,10 @@ class NominaPDF(View):
         return response
 
 # Create your views here.
-def sacar_sueldo(perfil, fechaI, fechaF):
+def sacar_sueldo(perfil, fechaI, fechaF, ver):
     valorP = 0
     valorF = 0
     valorD = 0
-    #import pdb; pdb.set_trace()
     ## Agregando produccion
     producido = Produccion.objects.filter(
         usuario= perfil.usuario,
@@ -139,22 +139,23 @@ def sacar_sueldo(perfil, fechaI, fechaF):
         )
     for prestamo in prestamos:
         valorD = valorD + prestamo.valor/prestamo.cuotas
-    if prestamos:
+    if prestamos and ver:
         prestamos.update(cuotas_debidas= F('cuotas_debidas') - 1)
     ## Valor Total
     valor = valorP + valorF - valorD - perfil.seguro - perfil.recordar
-    return valor
+    return valor, valorP, valorF, valorD
 
 @login_required
 def create_payment(request):
     nomina_antigua = Sueldo.objects.last()
     fechaI = nomina_antigua.creado
     if request.method == 'POST':
+        ver = True
         fechaF = timezone.now()
         sueldo = nomina_antigua.sueldo + 1
         perfiles = Perfil.objects.filter(usuario__is_active=True)
         for perfil in perfiles:
-            valor = sacar_sueldo(perfil, fechaI, fechaF)
+            valor, valorP, valorF, valorD = sacar_sueldo(perfil, fechaI, fechaF, ver)
             nomina = Sueldo(
                 usuario=perfil.usuario,
                 perfil=perfil,
@@ -165,3 +166,32 @@ def create_payment(request):
             nomina.save()
         return redirect('prueba')
     return render(request, 'sueldos/nomina.html')
+
+@login_required
+def see_payment(request, nomina):
+    ver = False
+    sueldos = Sueldo.objects.filter(sueldo=nomina)
+    fechaI = Sueldo.objects.filter(sueldo=nomina-1).last().creado + datetime.timedelta(seconds=3)
+    fechaF = sueldos.last().creado + datetime.timedelta(seconds=3)
+    subtotal = []
+    conteo = 1
+    total = 0
+    for sueldo in sueldos:
+        copia = model_to_dict(sueldo).copy()
+        valor, valorP, valorF, valorD = sacar_sueldo(sueldo.perfil, fechaI, fechaF, ver)
+        #import pdb; pdb.set_trace()
+        copia['empleado'] = str(sueldo.perfil.usuario.get_full_name())
+        copia['valor'] = valor
+        copia['valorP'] = valorP
+        copia['valorF'] = valorF
+        copia['valorD'] = valorD
+        copia['numero'] = conteo
+        subtotal.append(copia)
+        conteo += 1
+        total = total + valor
+    return render(request, "sueldos/sueldo.html", {
+        'sueldos': subtotal,
+        'nomina': nomina,
+        'total': total,
+        }
+    )

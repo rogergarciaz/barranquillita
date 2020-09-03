@@ -9,9 +9,11 @@ class Sueldo(models.Model):
     sueldo = models.PositiveIntegerField(blank=False)
     valor = models.PositiveIntegerField(blank=False)
     creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'El sueldo de {} {} es de {} pesos'.format(
+        return 'El sueldo el {} de {} {} es de {} pesos'.format(
+            self.creado.strftime('%Y-%m-%d %H:%M'),
             self.usuario.first_name,
             self.usuario.last_name,
             self.valor
@@ -19,8 +21,15 @@ class Sueldo(models.Model):
 
 class Descripcion(models.Model):
     nombre = models.CharField(max_length=100, blank=False)
+    precio_vendido = models.PositiveIntegerField(blank=True, default=None)
+    precio_pagado = models.PositiveIntegerField(blank=True, default=None)
+    precio_compra = models.PositiveIntegerField(blank=True, default=None)
+    cantidad = models.FloatField(blank=False, default=0.0)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}'.format(self.nombre)
+        if self.cantidad > 0.0:
+            return '{}'.format(self.nombre)
+        else:
+            return 'No hay {}'.format(self.nombre)

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 from django.forms.models import model_to_dict
+#from django.db.models import F
 
 # Models
 from clientes.models import Compra, Cliente
@@ -27,6 +28,8 @@ def create_sale(request):
             factura.perfil = request.user.perfil
             factura.venta = venta
             factura.save()
+            #descripcion = Descripcion.objects.filter(descripcion=form.descripcion)
+            #descripcion.update(cantidad= F('cantidad') + form.cantidad)
             return redirect('compra')
     else:
         form = CompraForm()
@@ -45,6 +48,8 @@ def create_sale_model_form(request):
                 factura.perfil = request.user.perfil
                 factura.venta = venta
                 factura.save()
+                #descripcion = Descripcion.objects.filter(descripcion=form.descripcion)
+                #descripcion.update(cantidad= F('cantidad') - form.cantidad)
             return redirect('factura', factura=venta)
     return render(request, "clientes/compras.html", {
         'formset': CompraFormSet

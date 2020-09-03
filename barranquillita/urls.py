@@ -35,6 +35,7 @@ urlpatterns = [
     path('salarios/fijo/', salarios_views.create_assistance, name='asistencia'),
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
+    path('sueldos/nomina/<int:nomina>/', sueldos_views.see_payment, name='nominas'),
     path('clientes/compra', clientes_views.create_sale, name='compra'),
     path('clientes/compras', clientes_views.create_sale_model_form, name='compras'),
     path('clientes/factura/<int:factura>/', clientes_views.create_bill, name='factura'),

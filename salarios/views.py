@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+#from django.db.models import F
 
 # Models
 from sueldos.models import Descripcion
@@ -19,6 +20,8 @@ def create_production(request):
         form = ProductionForm(request.POST)
         if form.is_valid():
             form.save()
+            #descripcion = Descripcion.objects.filter(descripcion=form.descripcion)
+            #descripcion.update(cantidad= F('cantidad') + form.cantidad)
             return redirect('produccion')
     else:
         form = ProductionForm()

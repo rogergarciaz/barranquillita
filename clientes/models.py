@@ -27,6 +27,7 @@ class Cliente(models.Model):
     nombre = models.CharField(max_length=100, blank=False)
     celular = models.CharField(max_length=20, blank=True)
     direccion = models.CharField(max_length=100, blank=True)
+    ciudad = models.CharField(max_length=100, blank=True)
     nota = models.CharField(max_length=100, blank=True)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)

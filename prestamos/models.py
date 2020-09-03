@@ -11,13 +11,15 @@ class Prestamo(models.Model):
     valor = models.PositiveIntegerField(blank=False)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
+    nota = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         valor = self.valor/self.cuotas
         debe = valor*self.cuotas_debidas
-        return '{} {} debe {} de {}'.format(
+        return '{} {} debe {} de {} se creo el {}'.format(
             self.usuario.first_name,
             self.usuario.last_name,
             debe,
-            self.descripcion
+            self.descripcion,
+            self.creado.strftime('%Y-%m-%d %H:%M')
         )
