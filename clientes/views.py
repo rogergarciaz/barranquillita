@@ -28,8 +28,11 @@ def create_sale(request):
             factura.perfil = request.user.perfil
             factura.venta = venta
             factura.save()
-            #descripcion = Descripcion.objects.filter(descripcion=form.descripcion)
-            #descripcion.update(cantidad= F('cantidad') + form.cantidad)
+            numero = form.cleaned_data.get('descripcion', None).pk
+            descripcion = Descripcion.objects.get(pk=numero)
+            cantidadA = descripcion.cantidad
+            descripcion.cantidad = cantidadA - form.cleaned_data.get('cantidad', None)
+            descripcion.save()
             return redirect('compra')
     else:
         form = CompraForm()
@@ -48,8 +51,11 @@ def create_sale_model_form(request):
                 factura.perfil = request.user.perfil
                 factura.venta = venta
                 factura.save()
-                #descripcion = Descripcion.objects.filter(descripcion=form.descripcion)
-                #descripcion.update(cantidad= F('cantidad') - form.cantidad)
+                numero = form.cleaned_data.get('descripcion', None).pk
+                descripcion = Descripcion.objects.get(pk=numero)
+                cantidadA = descripcion.cantidad
+                descripcion.cantidad = cantidadA - form.cleaned_data.get('cantidad', None)
+                descripcion.save()
             return redirect('factura', factura=venta)
     return render(request, "clientes/compras.html", {
         'formset': CompraFormSet
@@ -65,8 +71,8 @@ def create_bill(request, factura):
     total = 0
     for compra in compras:
         copia = model_to_dict(compra).copy()
-        descrip = Descripcion.objects.filter(nombre=compra.descripcion)
-        copia['descripcion'] = descrip[0].nombre
+        descrip = Descripcion.objects.get(pk=compra.descripcion.pk)
+        copia['descripcion'] = descrip.nombre
         pesos = compra.precio_vendido * compra.cantidad
         copia['total'] = pesos
         copia['numero'] = conteo

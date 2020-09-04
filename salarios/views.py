@@ -20,8 +20,11 @@ def create_production(request):
         form = ProductionForm(request.POST)
         if form.is_valid():
             form.save()
-            #descripcion = Descripcion.objects.filter(descripcion=form.descripcion)
-            #descripcion.update(cantidad= F('cantidad') + form.cantidad)
+            numero = form.cleaned_data.get('descripcion', None).pk
+            descripcion = Descripcion.objects.get(pk=numero)
+            cantidadA = descripcion.cantidad
+            descripcion.cantidad = cantidadA + form.cleaned_data.get('cantidad', None)
+            descripcion.save()
             return redirect('produccion')
     else:
         form = ProductionForm()

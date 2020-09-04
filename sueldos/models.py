@@ -24,7 +24,7 @@ class Descripcion(models.Model):
     precio_vendido = models.PositiveIntegerField(blank=True, default=None)
     precio_pagado = models.PositiveIntegerField(blank=True, default=None)
     precio_compra = models.PositiveIntegerField(blank=True, default=None)
-    cantidad = models.FloatField(blank=False, default=0.0)
+    cantidad = models.FloatField(blank=False, default=None)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
 

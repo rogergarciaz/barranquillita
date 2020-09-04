@@ -28,11 +28,11 @@ from clientes import views as clientes_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('usuarios/login/', usuarios_views.login_view, name='login'),
-    path('usuarios/logout/', usuarios_views.logout_view, name='logout'),
+    path('', usuarios_views.login_view, name='login'),
+    path('logout/', usuarios_views.logout_view, name='logout'),
     path('usuarios/', usuarios_views.profile_view, name='profile'),
-    path('salarios/produccion/', salarios_views.create_production, name='produccion'),
-    path('salarios/fijo/', salarios_views.create_assistance, name='asistencia'),
+    path('produccion/', salarios_views.create_production, name='produccion'),
+    path('asistencia/', salarios_views.create_assistance, name='asistencia'),
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
     path('sueldos/nomina/<int:nomina>/', sueldos_views.see_payment, name='nominas'),
@@ -40,5 +40,4 @@ urlpatterns = [
     path('clientes/compras', clientes_views.create_sale_model_form, name='compras'),
     path('clientes/factura/<int:factura>/', clientes_views.create_bill, name='factura'),
     path('prueba/', sueldos_views.NominaPDF.as_view(), name='prueba'),
-    #path('prueba2/', clientes_views.create_sale_model_form, name='prueba2'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
