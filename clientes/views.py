@@ -16,7 +16,6 @@ from clientes.forms import CompraForm
 # Create your views here.
 @login_required
 def create_sale(request):
-    # request.user.is_staff
     clientes = Cliente.objects.all()
     descripciones = Descripcion.objects.all()
     if request.method == 'POST':
@@ -27,12 +26,21 @@ def create_sale(request):
             factura.usuario = request.user
             factura.perfil = request.user.perfil
             factura.venta = venta
-            factura.save()
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = Descripcion.objects.get(pk=numero)
             cantidadA = descripcion.cantidad
-            descripcion.cantidad = cantidadA - form.cleaned_data.get('cantidad', None)
-            descripcion.save()
+            resta = cantidadA - form.cleaned_data.get('cantidad', None)
+            if resta > 0:
+                descripcion.cantidad = resta
+                descripcion.save()
+                factura.save()
+            else:
+                descripcion.cantidad = 0
+                descripcion.save()
+                factura.cantidad = cantidadA
+                factura.save()
+
+            
             return redirect('compra')
     else:
         form = CompraForm()
@@ -50,12 +58,23 @@ def create_sale_model_form(request):
                 factura.usuario = request.user
                 factura.perfil = request.user.perfil
                 factura.venta = venta
-                factura.save()
                 numero = form.cleaned_data.get('descripcion', None).pk
                 descripcion = Descripcion.objects.get(pk=numero)
                 cantidadA = descripcion.cantidad
-                descripcion.cantidad = cantidadA - form.cleaned_data.get('cantidad', None)
-                descripcion.save()
+                resta = cantidadA - form.cleaned_data.get('cantidad', None)
+                if resta >= 0 and cantidadA > 0:
+                    descripcion.cantidad = resta
+                    descripcion.save()
+                    factura.save()
+                elif resta < 0 and cantidadA > 0:
+                    descripcion.cantidad = 0
+                    descripcion.save()
+                    factura.cantidad = cantidadA
+                    factura.save()
+                else:
+                    descripcion.cantidad = resta
+                    descripcion.save()
+                    factura.save()
             return redirect('factura', factura=venta)
     return render(request, "clientes/compras.html", {
         'formset': CompraFormSet

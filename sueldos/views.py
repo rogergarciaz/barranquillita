@@ -147,6 +147,7 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
 
 @login_required
 def create_payment(request):
+    # request.user.is_staff
     nomina_antigua = Sueldo.objects.last()
     fechaI = nomina_antigua.creado
     if request.method == 'POST':
@@ -169,6 +170,7 @@ def create_payment(request):
 
 @login_required
 def see_payment(request, nomina):
+    # request.user.is_staff
     ver = False
     sueldos = Sueldo.objects.filter(sueldo=nomina)
     fechaI = Sueldo.objects.filter(sueldo=nomina-1).last().creado + datetime.timedelta(seconds=3)
@@ -179,7 +181,6 @@ def see_payment(request, nomina):
     for sueldo in sueldos:
         copia = model_to_dict(sueldo).copy()
         valor, valorP, valorF, valorD = sacar_sueldo(sueldo.perfil, fechaI, fechaF, ver)
-        #import pdb; pdb.set_trace()
         copia['empleado'] = str(sueldo.perfil.usuario.get_full_name())
         copia['valor'] = valor
         copia['valorP'] = valorP
