@@ -29,22 +29,38 @@ def create_sale(request):
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = Descripcion.objects.get(pk=numero)
             cantidadA = descripcion.cantidad
-            resta = cantidadA - form.cleaned_data.get('cantidad', None)
-            if resta > 0:
+            cantidad = form.cleaned_data.get('cantidad', None)
+            resta = cantidadA - cantidad
+            clienteid = form.cleaned_data.get('nombre', None).pk
+            precio = form.cleaned_data.get('precio_vendido', None)
+            cliente = Cliente.objects.get(pk=clienteid)
+            saldoA = cliente.saldo
+            saldo = saldoA - precio*cantidad
+            if resta >= 0 and cantidadA > 0:
                 descripcion.cantidad = resta
+                cliente.saldo = saldo
+                cliente.save()
                 descripcion.save()
                 factura.save()
-            else:
+            elif resta < 0 and cantidadA > 0:
                 descripcion.cantidad = 0
                 descripcion.save()
+                cliente.saldo = saldo
+                cliente.save()
                 factura.cantidad = cantidadA
+                factura.save()
+            else:
+                descripcion.cantidad = resta
+                descripcion.save()
+                cliente.saldo = saldo
+                cliente.save()
                 factura.save()
 
             
-            return redirect('compra')
+            return redirect('venta')
     else:
         form = CompraForm()
-    return render(request, 'clientes/compra.html', {'clientes':clientes, 'descripciones':descripciones})
+    return render(request, 'clientes/venta.html', {'clientes':clientes, 'descripciones':descripciones})
 
 @login_required
 def create_sale_model_form(request):
@@ -61,45 +77,57 @@ def create_sale_model_form(request):
                 numero = form.cleaned_data.get('descripcion', None).pk
                 descripcion = Descripcion.objects.get(pk=numero)
                 cantidadA = descripcion.cantidad
-                resta = cantidadA - form.cleaned_data.get('cantidad', None)
+                cantidad = form.cleaned_data.get('cantidad', None)
+                resta = cantidadA - cantidad
+                clienteid = form.cleaned_data.get('nombre', None).pk
+                precio = form.cleaned_data.get('precio_vendido', None)
+                cliente = Cliente.objects.get(pk=clienteid)
+                saldoA = cliente.saldo
+                saldo = saldoA - precio*cantidad
                 if resta >= 0 and cantidadA > 0:
                     descripcion.cantidad = resta
+                    cliente.saldo = saldo
+                    cliente.save()
                     descripcion.save()
                     factura.save()
                 elif resta < 0 and cantidadA > 0:
                     descripcion.cantidad = 0
                     descripcion.save()
+                    cliente.saldo = saldo
+                    cliente.save()
                     factura.cantidad = cantidadA
                     factura.save()
                 else:
                     descripcion.cantidad = resta
                     descripcion.save()
+                    cliente.saldo = saldo
+                    cliente.save()
                     factura.save()
-            return redirect('factura', factura=venta)
-    return render(request, "clientes/compras.html", {
+            return redirect('facturav', factura=venta)
+    return render(request, "clientes/ventas.html", {
         'formset': CompraFormSet
         }
     )
 
 @login_required
 def create_bill(request, factura):
-    compras = Compra.objects.filter(venta=factura)
-    cliente = compras.last().nombre
+    ventas = Compra.objects.filter(venta=factura)
+    cliente = ventas.last().nombre
     subtotal = []
     conteo = 1
     total = 0
-    for compra in compras:
-        copia = model_to_dict(compra).copy()
-        descrip = Descripcion.objects.get(pk=compra.descripcion.pk)
+    for venta in ventas:
+        copia = model_to_dict(venta).copy()
+        descrip = Descripcion.objects.get(pk=venta.descripcion.pk)
         copia['descripcion'] = descrip.nombre
-        pesos = compra.precio_vendido * compra.cantidad
+        pesos = venta.precio_vendido * venta.cantidad
         copia['total'] = pesos
         copia['numero'] = conteo
         subtotal.append(copia)
         conteo += 1
         total = total + pesos
     return render(request, "clientes/factura.html", {
-        'compras': subtotal,
+        'ventas': subtotal,
         'cliente': cliente,
         'venta': factura,
         'total': total,

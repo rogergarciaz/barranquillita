@@ -1,56 +1,82 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg fixed-top" id="main-navbar">
-    <div class="container">
-        <a href="{% url 'profile' %}" style="border-right: 1px solid #efefef;" class="navbar-brand pr-5">
-            <img src="{% static 'img/pupiplast.png' %}" height="45" class="d-inline-block align-top"/>
-        </a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a href="{% url 'profile' %}">
-                        {% if request.user.perfil.foto %}
-                            <img src="{{ request.user.perfil.foto.url }}" class="d-inline-block align-top rounden-circle" height="35" />
-                        {% else %}
-                            <img src="{% static 'img/default-profile.png' %}" class="d-inline-block align-top rounden-circle" height="35" />
-                        {% endif %}
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'produccion' %}">
-                        <strong>Producción</strong>
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'asistencia' %}">
-                        <strong>Asistencia</strong>
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'prestamo' %}">
-                        <strong>Prestar</strong>
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'nomina' %}">
-                        <strong>Nomina</strong>
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'compra' %}">
-                        <strong>Venta</strong>
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'compras' %}">
-                        <strong>Ventas</strong>
-                    </a>
-                </li>
-                <li class="nav-item nav-icon">
-                    <a href="{% url 'logout' %}">
-                        <strong>Salir</strong>
-                    </a>
-                </li>
-            </ul>
-        </div>
+  <div class="container">
+    <a
+      href="{% url 'profile' %}"
+      style="border-right: 1px solid #efefef"
+      class="navbar-brand pr-5"
+    >
+      <img
+        src="{% static 'img/pupiplast.png' %}"
+        height="45"
+        class="d-inline-block align-top"
+      />
+    </a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a href="{% url 'profile' %}">
+            {% if request.user.perfil.foto %}
+            <img
+              src="{{ request.user.perfil.foto.url }}"
+              class="d-inline-block align-top rounden-circle"
+              height="35"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/default-profile.png' %}"
+              class="d-inline-block align-top rounden-circle"
+              height="35"
+            />
+            {% endif %}
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'produccion' %}">
+            <strong>Producción</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'asistencia' %}">
+            <strong>Asistencia</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'prestamo' %}">
+            <strong>Prestar</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'nomina' %}">
+            <strong>Nomina</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'venta' %}">
+            <strong>Venta</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'ventas' %}">
+            <strong>Ventas</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'compra' %}">
+            <strong>Compra</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'compras' %}">
+            <strong>Compras</strong>
+          </a>
+        </li>
+        <li class="nav-item nav-icon">
+          <a href="{% url 'logout' %}">
+            <strong>Salir</strong>
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>

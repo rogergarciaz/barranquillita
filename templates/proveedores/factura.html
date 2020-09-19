@@ -14,8 +14,8 @@
     <div class="container">
       <h1><strong>Pupiplast del Caribe</strong></h1>
       <br /><br />
-      <h2><strong>Factura:</strong> {{ venta }}</h2>
-      <h2><strong>Cliente:</strong> {{ cliente }}</h2>
+      <h2><strong>Factura:</strong> {{ compra }}</h2>
+      <h2><strong>Proveedor:</strong> {{ proveedor }}</h2>
       <br />
       <div class="table-responsive">
         <table class="table">
@@ -29,13 +29,13 @@
             </tr>
           </thead>
           <tbody>
-            {% for venta in ventas %}
+            {% for compra in compras %}
             <tr>
-              <th scope="row">{{ venta.numero }}</th>
-              <td>{{ venta.descripcion }}</td>
-              <td>{{ venta.cantidad }}</td>
-              <td>{{ venta.precio_vendido }}</td>
-              <td>{{ venta.total }}</td>
+              <th scope="row">{{ compra.numero }}</th>
+              <td>{{ compra.descripcion }}</td>
+              <td>{{ compra.cantidad }}</td>
+              <td>{{ compra.precio_compra }}</td>
+              <td>{{ compra.total }}</td>
             </tr>
             {% endfor %}
             <tr>

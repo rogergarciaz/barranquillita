@@ -25,6 +25,7 @@ from salarios import views as salarios_views
 from prestamos import views as prestamos_views
 from sueldos import views as sueldos_views
 from clientes import views as clientes_views
+from proveedores import views as proveedores_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,8 +37,11 @@ urlpatterns = [
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
     path('sueldos/nomina/<int:nomina>/', sueldos_views.see_payment, name='nominas'),
-    path('clientes/compra', clientes_views.create_sale, name='compra'),
-    path('clientes/compras', clientes_views.create_sale_model_form, name='compras'),
-    path('clientes/factura/<int:factura>/', clientes_views.create_bill, name='factura'),
+    path('clientes/venta', clientes_views.create_sale, name='venta'),
+    path('clientes/ventas', clientes_views.create_sale_model_form, name='ventas'),
+    path('clientes/factura/<int:factura>/', clientes_views.create_bill, name='facturav'),
+    path('proveedores/compra', proveedores_views.create_adquisition, name='compra'),
+    path('proveedores/compras', proveedores_views.create_adquisition_model_form, name='compras'),
+    path('proveedores/factura/<int:factura>/', proveedores_views.create_bill, name='facturac'),
     path('prueba/', sueldos_views.NominaPDF.as_view(), name='prueba'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
