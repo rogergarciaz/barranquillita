@@ -19,13 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-# Models
+# Views
 from usuarios import views as usuarios_views
 from salarios import views as salarios_views
 from prestamos import views as prestamos_views
 from sueldos import views as sueldos_views
 from clientes import views as clientes_views
 from proveedores import views as proveedores_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
     path('sueldos/nomina/<int:nomina>/', sueldos_views.see_payment, name='nominas'),
+    path('sueldos/buscar/', sueldos_views.search_descriptions, name='search'),
     path('clientes/venta', clientes_views.create_sale, name='venta'),
     path('clientes/ventas', clientes_views.create_sale_model_form, name='ventas'),
     path('clientes/factura/<int:factura>/', clientes_views.create_bill, name='facturav'),

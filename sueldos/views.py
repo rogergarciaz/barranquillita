@@ -18,9 +18,11 @@ from django.views.generic import View
 from django.http import HttpResponse
 from django.conf import settings
 from django.forms.models import model_to_dict
+from django.views.generic import TemplateView, ListView
+from django.db.models import Q
 
 # Models
-from sueldos.models import Sueldo
+from sueldos.models import Sueldo, Descripcion
 from salarios.models import Produccion, Fijo
 from prestamos.models import Prestamo
 from usuarios.models import Perfil
@@ -194,5 +196,29 @@ def see_payment(request, nomina):
         'sueldos': subtotal,
         'nomina': nomina,
         'total': total,
+        }
+    )
+
+def search_descriptions(request):
+    descripciones = Descripcion.objects.filter(cantidad__lte=500)
+    query = "Escribe la descripción"
+    if request.method == 'POST':
+        query = request.POST['description']
+        if query.isnumeric():
+            descripciones = Descripcion.objects.filter(
+                Q(cantidad=query)
+            )
+        else:
+            descripciones = Descripcion.objects.filter(
+                Q(nombre__icontains=query)
+            )
+        return render(request, "sueldos/buscar.html", {
+            'descripciones': descripciones,
+            'query': query,
+            }
+        )
+    return render(request, "sueldos/buscar.html", {
+        'descripciones': descripciones,
+        'query': query,
         }
     )

@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block head_content %}
+<title>Buscar</title>
+{% endblock %} {% block container %} {% load static %}
+<div class="container">
+  <br />
+  <br />
+  <br />
+  <form action="{% url 'search' %}" method="POST">
+    {% csrf_token %}
+    <input name="description" type="text" placeholder="{{ query }}" />
+    <button type="submit">Buscar</button>
+  </form>
+  <br />
+  <br />
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Descripción</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Precio de Venta</th>
+          <th scope="col">Precio de Compra</th>
+          <th scope="col">Precio Pagado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for descripcion in descripciones %}
+        <tr>
+          <th scope="row">{{ descripcion.nombre }}</th>
+          <td>{{ descripcion.cantidad }}</td>
+          <td>{{ descripcion.precio_vendido }}</td>
+          <td>{{ descripcion.precio_compra }}</td>
+          <td>{{ descripcion.precio_pagado }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
