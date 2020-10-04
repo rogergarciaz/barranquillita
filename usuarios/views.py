@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from usuarios.forms import PerfilForm
 
 # Create your views here.
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('profile')
@@ -18,8 +20,9 @@ def login_view(request):
             login(request, usuario)
             return redirect('profile')
         else:
-            return render(request, 'usuarios/login.html', {'error' : 'Usuario y/o Contraseña Invalidos'})
+            return render(request, 'usuarios/login.html', {'error': 'Usuario y/o Contraseña Invalidos'})
     return render(request, 'usuarios/login.html')
+
 
 @login_required
 def profile_view(request):
@@ -37,8 +40,10 @@ def profile_view(request):
     return render(
         request=request,
         template_name='usuarios/profile.html',
-        context={'perfil': request.user.perfil, 'usuario': request.user, 'form': form}
+        context={'perfil': request.user.perfil,
+                 'usuario': request.user, 'form': form}
     )
+
 
 @login_required
 def logout_view(request):

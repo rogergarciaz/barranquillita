@@ -27,7 +27,17 @@
               @{{ usuario.username }} | {{ usuario.get_full_name }}
             </h5>
             <p class="ml-4">
-              <input type="file" name="foto" required="true" />
+              <div class="custom-file">
+                <input
+                  class="custom-file-input"
+                  type="file"
+                  name="foto"
+                  required="true"
+                  id="customFile"
+                  lang="es"
+                />
+                <label class="custom-file-label" for="customFile"></label>
+              </div>
             </p>
           </div>
         </div>
@@ -50,9 +60,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block mt-5">
-          Actualizar Información
-        </button>
+        <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
       </form>
     </div>
   </div>

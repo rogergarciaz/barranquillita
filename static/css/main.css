@@ -40,7 +40,12 @@ body {
   border-radius: 1px;
   margin-top: 0;
 }
-
+.custom-file-label::after {
+  content: 'Elegir';
+}
+.custom-file-label {
+  width: 53px;
+}
 #user-posts #post-thumb {
   background: #fff;
 }
