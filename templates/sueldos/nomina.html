@@ -1,38 +1,34 @@
-{% extends "base.html" %}
-
-{% load static %}
-
-{% block head_content %}
-    <title>@{{ request.user }} | Nomina</title>
-{% endblock %}
-
-{% block container %}
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-6 pt-3 pb-3" id="profile-box">
-                <h4 class="mb-4">Genera la nomina!</h4>
-                <form method="POST" >
-                    {% csrf_token %}
-
-                    {# Campo Nota #}
-                    <div class="form-group">
-                        <input
-                            class="form-control"
-                            type="text"
-                            name="nota"
-                            placeholder="Nota"
-                        >
-                    </div>
-
-                    <div class="col-lg-1">                            
-                        <a href="{% url 'prueba' %}" >
-                            Nomina Anterior
-                        </a>                          
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block mt-5" >Generar</button>
-                </form>
-            </div>
+{% extends "base.html" %} {% load static %} {% block head_content %}
+<title>@{{ request.user }} | Nomina</title>
+{% endblock %} {% block container %}
+<!-- Esto se mostrara si el usuario tiene permisos -->
+{% if request.user.is_staff is True %}
+<div class="container">
+  <div class="row justify-content-md-center" style="justify-content: center">
+    <div class="col-6 pt-3 pb-3" id="profile-box">
+      <h4 class="mb-4">Genera la nomina!</h4>
+      <form method="POST">
+        {% csrf_token %} {# Campo Nota #}
+        <div class="form-group">
+          <input
+            class="form-control"
+            type="text"
+            name="nota"
+            placeholder="Nota"
+          />
         </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-5">
+          Generar
+        </button>
+      </form>
     </div>
+  </div>
+</div>
+{% endif %}
+<!-- Esto se mostrara si el usuario no tiene permisos -->
+{% if request.user.is_staff is False %} {% include "permisos.html" %}
+<!-- Esto se mostrara si el usuario no tiene permisos -->
+{% endif%}
+<!-- Esto finalizara el bloque del template -->
 {% endblock %}

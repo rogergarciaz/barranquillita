@@ -1,86 +1,91 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% load static %} {% block head_content %}
+<title>Prueba Formset</title>
+<style>
+  select {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  input {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+</style>
+{% endblock %} {% block container %}
 
+<div class="container">
+  <div class="row justify-content-md-center" style="justify-content: center">
+    <div class="col-8 pt-2 pb-2" id="profile-box">
+      <h4 class="mb-4">Carga la Venta!</h4>
 
-{% load static %}
+      <form method="POST" id="vent">
+        {% csrf_token %} {{ formset.management_form }}
 
-{% block head_content %}
-    <title>Prueba Formset</title>
-    <style>
-        select {
-            display: block;
-            width: 100%;
-            height: calc(1.5em + .75rem + 2px);
-            padding: .375rem .75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: .25rem;
-            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        }
-        input {
-            display: block;
-            width: 100%;
-            height: calc(1.5em + .75rem + 2px);
-            padding: .375rem .75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: .25rem;
-            transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        }
-    </style>
-{% endblock %}
-
-{% block container %}
-
-    <br/><br/>
-
-    <h4 class="mb-4">Carga la Venta!</h4>
-
-    <form method="POST" id="vent">
-
-        {% csrf_token %}
-        
-        {{ formset.management_form }}
-        
         <div id="form_set">
-            {% for form in formset.forms %}
-                {{form.non_field_errors}}
-                {{form.errors}}
-                <table class='no_error'>
-                    {{ form }}
-                </table>
-                <br/>
-            {% endfor %}
+          {% for form in formset.forms %} {{form.non_field_errors}}
+          {{form.errors}}
+          <table class="no_error">
+            {{ form }}
+          </table>
+          <br />
+          {% endfor %}
         </div>
-        <input onclick="add()" type="button" value="Añadir" id="add_more"
-        class="btn btn-primary"style="width: 10%;">
-        <div id="empty_form" style="display:none">
-            <hr />
-            <br />
-            <table class='no_error'>
-                {{ formset.empty_form }}
-            </table>
-            <br />
+        <input
+          onclick="add()"
+          type="button"
+          value="+"
+          id="add_more"
+          class="btn btn-default"
+          style="width: 20%"
+        />
+        <div id="empty_form" style="display: none">
+          <hr />
+          <br />
+          <table class="no_error">
+            {{ formset.empty_form }}
+          </table>
+          <br />
         </div>
-        <button type="submit" class="btn btn-primary btn-block mt-5">Cargar!</button>
-    </form>
+        <button type="submit" class="btn btn-primary btn-block mt-5">
+          Cargar!
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
 
-    <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
-    <script>
-        function add() {
-            var form_idx = $('#id_form-TOTAL_FORMS').val();
-            $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
-            $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-        }
-    </script>
+<script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
+<script>
+  function add() {
+    var form_idx = $('#id_form-TOTAL_FORMS').val();
+    $('#form_set').append(
+      $('#empty_form')
+        .html()
+        .replace(/__prefix__/g, form_idx)
+    );
+    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+  }
+</script>
 
 {% endblock %}

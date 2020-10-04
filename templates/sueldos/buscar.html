@@ -2,13 +2,20 @@
 <title>Buscar</title>
 {% endblock %} {% block container %} {% load static %}
 <div class="container">
-  <br />
-  <br />
-  <br />
-  <form action="{% url 'search' %}" method="POST">
+  <form action="{% url 'buscar' %}" method="POST">
     {% csrf_token %}
-    <input name="description" type="text" placeholder="{{ query }}" />
-    <button type="submit">Buscar</button>
+    <div class="row">
+      <div class="col text-center">
+        <input
+          name="description"
+          class="form-control"
+          type="text"
+          placeholder="{{ query }}"
+        />
+        <br />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </div>
+    </div>
   </form>
   <br />
   <br />
@@ -36,5 +43,10 @@
       </tbody>
     </table>
   </div>
+  {% if request.user.is_authenticated is False %}
+  <div class="col-lg-4">
+    <a href="{% url 'login' %}"> Inicia Sesión </a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

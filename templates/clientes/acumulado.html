@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block head_content %}
+<title>Acumulado</title>
+{% endblock %} {% block container %} {% load static %}
+<!-- Esto se mostrara si el usuario tiene permisos -->
+{% if request.user.is_staff is True %}
+<div class="container">
+  <form action="{% url 'acumulado' %}" method="POST">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col text-center">
+        <button type="submit" class="btn btn-primary">Generar</button>
+      </div>
+    </div>
+  </form>
+  <br />
+  <br />
+  {% if tabla %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Cliente</th>
+          <th scope="col">Vendedor</th>
+          <th scope="col">Crédito</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Precio Unitario</th>
+          <th scope="col">Subotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for venta in ventas %}
+        <tr>
+          <th scope="row">{{ venta.numero }}</th>
+          <td>{{ venta.descripcion }}</td>
+          <td>{{ venta.nombre }}</td>
+          <td>{{ venta.usuario }}</td>
+          <td>{{ venta.credito }}</td>
+          <td>{{ venta.cantidad }}</td>
+          <td>{{ venta.precio_vendido }}</td>
+          <td>{{ venta.total }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="1"><strong>Efectivo</strong></td>
+          <td>{{ efectivo }}</td>
+        </tr>
+        <tr>
+          <td colspan="1"><strong>Credito</strong></td>
+          <td>{{ credito }}</td>
+        </tr>
+        <tr>
+          <td colspan="1"><strong>TOTAL</strong></td>
+          <td>{{ total }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+<!-- Esto se mostrara si el usuario no tiene permisos -->
+{% if request.user.is_staff is False %} {% include "permisos.html" %}
+<!-- Esto se mostrara si el usuario no tiene permisos -->
+{% endif%}
+<!-- Esto finalizara el bloque del template -->
+{% endblock %}

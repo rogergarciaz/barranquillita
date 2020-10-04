@@ -1,89 +1,95 @@
-{% extends "base.html" %}
-
-{% block head_content %}
+{% extends "base.html" %} {% block head_content %}
 <title>Cargar Asistencia</title>
-{% endblock %}
+{% endblock %} {% block container %}
 
-{% block container %}
+<div class="container">
+  <div class="row justify-content-md-center" style="justify-content: center">
+    <div class="col-6 pt-3 pb-3" id="profile-box">
+      <h4 class="mb-4">Carga la Asistencia!</h4>
 
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-6 pt-3 pb-3" id="profile-box">
-                <h4 class="mb-4">Carga la Asistencia!</h4>
-
-                <form method="POST" id="produc">
-                    {% csrf_token %}
-
-                    {# Campo Area #}
-                    <div class="form-group">
-                        <label for="Area">Escoge el Area:</label>
-                        <select name="area" id="Area" class="form-control {% if form.area.errors %}is-invalid{% endif %}">
-                            <option value="Administracion">Administración</option>
-                            <option value="Lavado">Lavado</option>
-                            <option value="Aglutinado">Aglutinado</option>
-                            <option value="Peletizado">Peletizado</option>
-                            <option value="Extrusion">Extrusion</option>
-                            <option value="Sellado">Sellado</option>
-                            <option value="Fijos">Por día</option>
-                        </select>
-                        <div class="invalid-feedback">
-                            {% for error in form.area.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Precio #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.precio_pagado.errors %}is-invalid{% endif %}"
-                            type="number"
-                            name="precio_pagado"
-                            placeholder="Pagado por día"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.precio_pagado.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Usuario #}
-                    <input id="usuario" type="hidden" name="usuario">
-
-                    {# Campo perfil #}
-                    <div class="form-group">
-                        <label for="Empleados">Escoge el empleado:</label>
-                        <select name="perfil" onchange="changeUser()" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
-                            <option>----</option>
-                            {% for usuario in usuarios %}
-                                <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">
-                            {% for error in form.perfil.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Nota #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.nota.errors %}is-invalid{% endif %}"
-                            type="text"
-                            name="nota"
-                            placeholder="Nota"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.nota.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block mt-5">Cargar!</button>
-
-                </form>
-            </div>
+      <form method="POST" id="produc">
+        {% csrf_token %} {# Campo Area #}
+        <div class="form-group">
+          <label for="Area">Escoge el Area:</label>
+          <select
+            name="area"
+            id="Area"
+            class="form-control {% if form.area.errors %}is-invalid{% endif %}"
+          >
+            <option value="Administracion">Administración</option>
+            <option value="Lavado">Lavado</option>
+            <option value="Aglutinado">Aglutinado</option>
+            <option value="Peletizado">Peletizado</option>
+            <option value="Extrusion">Extrusion</option>
+            <option value="Sellado">Sellado</option>
+            <option value="Fijos">Por día</option>
+          </select>
+          <div class="invalid-feedback">
+            {% for error in form.area.errors %}{{ error }}{% endfor %}
+          </div>
         </div>
-    </div>
 
-    <script>
-        function changeUser() {
-            document.getElementById("usuario").value = document.getElementById("Empleados").value;
-        }
-    </script>
+        {# Campo Precio #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.precio_pagado.errors %}is-invalid{% endif %}"
+            type="number"
+            name="precio_pagado"
+            placeholder="Pagado por día"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.precio_pagado.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Usuario #}
+        <input id="usuario" type="hidden" name="usuario" />
+
+        {# Campo perfil #}
+        <div class="form-group">
+          <label for="Empleados">Escoge el empleado:</label>
+          <select
+            name="perfil"
+            onchange="changeUser()"
+            id="Empleados"
+            class="form-control {% if form.perfil.errors %}is-invalid{% endif %}"
+          >
+            <option>----</option>
+            {% for usuario in usuarios %}
+            <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            {% for error in form.perfil.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Nota #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.nota.errors %}is-invalid{% endif %}"
+            type="text"
+            name="nota"
+            placeholder="Nota"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.nota.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-5">
+          Cargar!
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function changeUser() {
+    document.getElementById('usuario').value = document.getElementById(
+      'Empleados'
+    ).value;
+  }
+</script>
 {% endblock %}

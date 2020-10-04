@@ -1,98 +1,120 @@
-{% extends "base.html" %}
-
-{% block head_content %}
+{% extends "base.html" %} {% block head_content %}
 <title>Cargar Prestamo</title>
-{% endblock %}
+{% endblock %} {% block container %}
+<!-- Esto se mostrara si el usuario tiene permisos -->
+{% if request.user.is_staff is True %}
+<div class="container">
+  <div class="row justify-content-md-center" style="justify-content: center">
+    <div class="col-6 pt-3 pb-3" id="profile-box">
+      <h4 class="mb-4">Carga un Prestamo!</h4>
 
-{% block container %}
-
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-6 pt-3 pb-3" id="profile-box">
-                <h4 class="mb-4">Carga un Prestamo!</h4>
-
-                <form method="POST" id="produc">
-                    {% csrf_token %}
-
-                    {# Campo Descripcion #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}"
-                            type="text"
-                            name="descripcion"
-                            placeholder="Descripción"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Cuotas #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.cuota.errors %}is-invalid{% endif %}"
-                            type="number"
-                            name="cuotas"
-                            placeholder="Cantidad de cuotas"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.cuotas.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Cuotas Debidas #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.cuotas_debidas.errors %}is-invalid{% endif %}"
-                            type="number"
-                            name="cuotas_debidas"
-                            placeholder="Cuotas por pagar"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.cuotas_debidas.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Valor #}
-                    <div class="form-group">
-                        <input
-                            class="form-control {% if form.valor.errors %}is-invalid{% endif %}"
-                            type="number"
-                            name="valor"
-                            placeholder="Valor del prestamo"
-                        >
-                        <div class="invalid-feedback">
-                            {% for error in form.valor.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    {# Campo Usuario #}
-                    <input id="usuario" type="hidden" name="usuario">
-
-                    {# Campo perfil #}
-                    <div class="form-group">
-                        <label for="Empleados">Escoge el empleado:</label>
-                        <select name="perfil" onchange="changeUser()" id="Empleados" class="form-control {% if form.perfil.errors %}is-invalid{% endif %}">
-                            <option>----</option>
-                            {% for usuario in usuarios %}
-                                <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">
-                            {% for error in form.perfil.errors %}{{ error }}{% endfor %}
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block mt-5">Cargar!</button>
-
-                </form>
-            </div>
+      <form method="POST" id="produc">
+        {% csrf_token %} {# Campo Descripcion #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}"
+            type="text"
+            name="descripcion"
+            placeholder="Descripción"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
+          </div>
         </div>
-    </div>
 
-    <script>
-        function changeUser() {
-            document.getElementById("usuario").value = document.getElementById("Empleados").value;
-        }
-    </script>
+        {# Campo Cuotas #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.cuota.errors %}is-invalid{% endif %}"
+            type="number"
+            name="cuotas"
+            placeholder="Cantidad de cuotas"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.cuotas.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Cuotas Debidas #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.cuotas_debidas.errors %}is-invalid{% endif %}"
+            type="number"
+            name="cuotas_debidas"
+            placeholder="Cuotas por pagar"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.cuotas_debidas.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Valor #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.valor.errors %}is-invalid{% endif %}"
+            type="number"
+            name="valor"
+            placeholder="Valor del prestamo"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.valor.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Usuario #}
+        <input id="usuario" type="hidden" name="usuario" />
+
+        {# Campo perfil #}
+        <div class="form-group">
+          <label for="Empleados">Escoge el empleado:</label>
+          <select
+            name="perfil"
+            onchange="changeUser()"
+            id="Empleados"
+            class="form-control {% if form.perfil.errors %}is-invalid{% endif %}"
+          >
+            <option>----</option>
+            {% for usuario in usuarios %}
+            <option value="{{usuario.pk}}">{{usuario.get_full_name}}</option>
+            {% endfor %}
+          </select>
+          <div class="invalid-feedback">
+            {% for error in form.perfil.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo nota #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.nota.errors %}is-invalid{% endif %}"
+            type="text"
+            name="nota"
+            placeholder="Notas"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.nota.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-5">
+          Cargar!
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function changeUser() {
+    document.getElementById('usuario').value = document.getElementById(
+      'Empleados'
+    ).value;
+  }
+</script>
+{% endif %}
+<!-- Esto se mostrara si el usuario no tiene permisos -->
+{% if request.user.is_staff is False %} {% include "permisos.html" %}
+<!-- Esto se mostrara si el usuario no tiene permisos -->
+{% endif%}
+<!-- Esto finalizara el bloque del template -->
 {% endblock %}

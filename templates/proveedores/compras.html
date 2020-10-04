@@ -34,40 +34,46 @@
 </style>
 {% endblock %} {% block container %}
 
-<br /><br />
+<div class="container">
+  <div class="row justify-content-md-center" style="justify-content: center">
+    <div class="col-8 pt-2 pb-2" id="profile-box">
+      <h4 class="mb-4">Carga la Compra!</h4>
 
-<h4 class="mb-4">Carga la Compra!</h4>
+      <form method="POST" id="vent">
+        {% csrf_token %} {{ formset.management_form }}
 
-<form method="POST" id="vent">
-  {% csrf_token %} {{ formset.management_form }}
-
-  <div id="form_set">
-    {% for form in formset.forms %} {{form.non_field_errors}} {{form.errors}}
-    <table class="no_error">
-      {{ form }}
-    </table>
-    <br />
-    {% endfor %}
+        <div id="form_set">
+          {% for form in formset.forms %} {{form.non_field_errors}}
+          {{form.errors}}
+          <table class="no_error">
+            {{ form }}
+          </table>
+          <br />
+          {% endfor %}
+        </div>
+        <input
+          onclick="add()"
+          type="button"
+          value="+"
+          id="add_more"
+          class="btn btn-default"
+          style="width: 20%"
+        />
+        <div id="empty_form" style="display: none">
+          <hr />
+          <br />
+          <table class="no_error">
+            {{ formset.empty_form }}
+          </table>
+          <br />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block mt-5">
+          Cargar!
+        </button>
+      </form>
+    </div>
   </div>
-  <input
-    onclick="add()"
-    type="button"
-    value="Añadir"
-    id="add_more"
-    class="btn btn-primary"
-    style="width: 10%"
-  />
-  <div id="empty_form" style="display: none">
-    <hr />
-    <br />
-    <table class="no_error">
-      {{ formset.empty_form }}
-    </table>
-    <br />
-  </div>
-  <button type="submit" class="btn btn-primary btn-block mt-5">Cargar!</button>
-</form>
-
+</div>
 <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
 <script>
   function add() {

@@ -1,10 +1,15 @@
+import pytz
+import datetime
+
 # Django
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.forms import formset_factory
+from django.utils import timezone
 from django.forms.models import model_to_dict
-#from django.db.models import F
+from django.db.models import F
+from django.db.models import Q
 
 # Models
 from clientes.models import Compra, Cliente
@@ -12,6 +17,7 @@ from sueldos.models import Descripcion
 
 # Forms
 from clientes.forms import CompraForm
+
 
 # Create your views here.
 @login_required
@@ -56,11 +62,11 @@ def create_sale(request):
                 cliente.save()
                 factura.save()
 
-            
             return redirect('venta')
     else:
         form = CompraForm()
-    return render(request, 'clientes/venta.html', {'clientes':clientes, 'descripciones':descripciones})
+    return render(request, 'clientes/venta.html', {'clientes': clientes, 'descripciones': descripciones})
+
 
 @login_required
 def create_sale_model_form(request):
@@ -106,8 +112,9 @@ def create_sale_model_form(request):
             return redirect('facturav', factura=venta)
     return render(request, "clientes/ventas.html", {
         'formset': CompraFormSet
-        }
+    }
     )
+
 
 @login_required
 def create_bill(request, factura):
@@ -131,5 +138,60 @@ def create_bill(request, factura):
         'cliente': cliente,
         'venta': factura,
         'total': total,
+    }
+    )
+
+
+@login_required
+def see_consolidate(request):
+    # if request.user.is_staff:
+    tabla = False
+    fechaF = datetime.date.today()
+    dia = datetime.timedelta(days=1)
+    fechaI = fechaF - dia
+    fechaF = fechaF + dia
+    ventas = Compra.objects.filter(creado__range=[fechaI, fechaF])
+    if request.method == 'POST':
+        tabla = True
+        credito = 0
+        efectivo = 0
+        total = 0
+        subtotal = []
+        conteo = 1
+        ventas = Compra.objects.filter(
+            Q(creado__range=[fechaI, fechaF])
+        )
+        for venta in ventas:
+            copia = model_to_dict(venta).copy()
+            descrip = Descripcion.objects.get(pk=venta.descripcion.pk)
+            copia['descripcion'] = descrip.nombre
+            usua = User.objects.get(pk=venta.usuario.pk)
+            copia['usuario'] = usua.get_full_name()  # usua.username
+            clien = Cliente.objects.get(pk=venta.nombre.pk)
+            copia['nombre'] = clien.nombre
+            valor = venta.cantidad * venta.precio_vendido
+            if 'credito' in venta.nota:
+                credito = credito + valor
+                total = total + valor
+                copia['credito'] = 'Si'
+            else:
+                efectivo = efectivo + valor
+                total = total + valor
+                copia['credito'] = 'No'
+            copia['total'] = valor
+            copia['numero'] = conteo
+            subtotal.append(copia)
+            conteo += 1
+        return render(request, "clientes/acumulado.html", {
+            'ventas': subtotal,
+            'tabla': tabla,
+            'credito': credito,
+            'efectivo': efectivo,
+            'total': total,
         }
+        )
+    return render(request, "clientes/acumulado.html", {
+        'ventas': ventas,
+        'tabla': tabla,
+    }
     )

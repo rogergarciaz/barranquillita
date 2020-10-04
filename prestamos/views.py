@@ -1,4 +1,4 @@
-#Django
+# Django
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from prestamos.forms import PrestamoForm
@@ -12,8 +12,12 @@ def create_loan(request):
     if request.method == 'POST':
         form = PrestamoForm(request.POST)
         if form.is_valid():
-            form.save()
+            prestamo = form.save(commit=False)
+            import pdb
+            pdb.set_trace()
+            prestamo.agregado = request.user.username
+            prestamo.save()
             return redirect('prestamo')
     else:
         form = PrestamoForm()
-    return render(request, 'prestamos/prestamo.html', {'usuarios':usuarios})
+    return render(request, 'prestamos/prestamo.html', {'usuarios': usuarios})
