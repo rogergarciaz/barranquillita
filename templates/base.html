@@ -11,6 +11,11 @@
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <link href="{% static 'css/pbootstrap.min.css' %}" rel="stylesheet" />
+    <!-- Live Search -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}" />
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
   </head>
   <body>
     {% if request.user.is_authenticated %} {% include "nav.html" %} {% endif %}

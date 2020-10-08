@@ -31,9 +31,14 @@ class Descripcion(models.Model):
     cantidad = models.FloatField(blank=False, default=None)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
+    area = models.CharField(max_length=100, blank=False, default='Sellado')
 
     def __str__(self):
-        if self.cantidad > 0.0:
+        if self.cantidad > 0.0 and (self.area == 'Extrusion' or self.area == 'Sellado'):
             return '{}'.format(self.nombre)
-        else:
+        elif self.cantidad <= 0.0 and (self.area != 'Extrusion' or self.area != 'Sellado'):
             return 'No hay {}'.format(self.nombre)
+        # elif self.cantidad <= 0.0 and (self.area != 'Extrusion' or self.area != 'Sellado'):
+        #     return 'No vender {}'.format(self.nombre)
+        else:
+            return 'No vender {}'.format(self.nombre)

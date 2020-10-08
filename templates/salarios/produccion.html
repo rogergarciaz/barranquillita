@@ -16,13 +16,9 @@
             id="Area"
             class="form-control {% if form.area.errors %}is-invalid{% endif %}"
           >
-            <option value="Administracion">Administración</option>
             <option value="Lavado">Lavado</option>
             <option value="Aglutinado">Aglutinado</option>
             <option value="Peletizado">Peletizado</option>
-            <option value="Extrusion">Extrusion</option>
-            <option value="Sellado">Sellado</option>
-            <option value="Fijos">Por día</option>
           </select>
           <div class="invalid-feedback">
             {% for error in form.area.errors %}{{ error }}{% endfor %}
@@ -35,7 +31,8 @@
           <select
             name="descripcion"
             id="Descripcion"
-            class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}"
+            class="selectpicker"
+            data-live-search="true"
           >
             <option>----</option>
             {% for descripcion in descripciones %}

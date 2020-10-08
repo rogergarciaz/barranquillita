@@ -17,6 +17,7 @@ from proveedores.forms import AdquisicionForm
 @login_required
 def create_adquisition_model_form(request):
     AdquisicionFormSet = formset_factory(AdquisicionForm, extra=1)
+    proveedores = Proveedor.objects.all()
     if request.method == 'POST':
         compra = Adquisicion.objects.last().compra + 1
         formset = AdquisicionFormSet(request.POST)
@@ -24,6 +25,7 @@ def create_adquisition_model_form(request):
             for form in formset:
                 factura = form.save(commit=False)
                 factura.usuario = request.user
+                import pdb; pdb.set_trace()
                 factura.perfil = request.user.perfil
                 factura.compra = compra
                 descripcionid = form.cleaned_data.get('descripcion', None).pk
@@ -31,9 +33,10 @@ def create_adquisition_model_form(request):
                 cantidadA = descripcion.cantidad
                 cantidad = form.cleaned_data.get('cantidad', None)
                 suma = cantidadA + cantidad
-                proveedorid = form.cleaned_data.get('nombre', None).pk
+                proveedorid = int(request.POST['nombre'])
                 precio = form.cleaned_data.get('precio_compra', None)
                 proveedor = Proveedor.objects.get(pk=proveedorid)
+                factura.nombre = proveedor
                 saldoA = proveedor.saldo
                 saldo = saldoA + precio*cantidad
                 descripcion.cantidad = suma
@@ -43,6 +46,7 @@ def create_adquisition_model_form(request):
                 factura.save()
             return redirect('facturac', factura=compra)
     return render(request, "proveedores/compras.html", {
+        'proveedores': proveedores,
         'formset': AdquisicionFormSet
     }
     )

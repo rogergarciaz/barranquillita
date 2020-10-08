@@ -21,6 +21,7 @@ urlpatterns = [
     path('logout/', usuarios_views.logout_view, name='logout'),
     path('usuarios/', usuarios_views.profile_view, name='profile'),
     path('produccion/', salarios_views.create_production, name='produccion'),
+    path('producto/', salarios_views.create_product, name='producto'),
     path('asistencia/', salarios_views.create_assistance, name='asistencia'),
     path('prestamos/', prestamos_views.create_loan, name='prestamo'),
     path('sueldos/', sueldos_views.create_payment, name='nomina'),

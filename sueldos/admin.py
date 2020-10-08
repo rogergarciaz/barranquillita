@@ -36,9 +36,9 @@ class SueldoAdmin(admin.ModelAdmin):
 
 class DescripcionAdmin(admin.ModelAdmin):
     list_display = ('pk', 'nombre', 'precio_vendido', 'precio_pagado',
-                    'precio_compra', 'cantidad', 'modificado', 'creado')
+                    'precio_compra', 'cantidad', 'modificado', 'creado', 'area')
     list_display_links = ('pk',)
-    list_editable = ('nombre', 'precio_vendido',
+    list_editable = ('nombre', 'precio_vendido', 'area',
                      'precio_pagado', 'precio_compra', 'cantidad')
     search_fields = ('nombre', 'precio_vendido',
                      'precio_pagado', 'precio_compra', 'cantidad')
@@ -48,6 +48,7 @@ class DescripcionAdmin(admin.ModelAdmin):
         ('Descripcion', {
             'fields': (
                 ('nombre', 'cantidad'),
+                ('area', ),
             ),
         }),
         ('Informacion Extra', {

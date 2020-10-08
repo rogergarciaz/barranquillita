@@ -21,7 +21,8 @@ from clientes.forms import CompraForm
 # Create your views here.
 @login_required
 def create_sale_model_form(request):
-    CompraFormSet = formset_factory(CompraForm, extra=1)
+    clientes = Cliente.objects.all()
+    CompraFormSet = formset_factory(CompraForm, extra=1)  # can_delete=True,
     if request.method == 'POST':
         venta = Compra.objects.last().venta + 1
         formset = CompraFormSet(request.POST)
@@ -36,9 +37,10 @@ def create_sale_model_form(request):
                 cantidadA = descripcion.cantidad
                 cantidad = form.cleaned_data.get('cantidad', None)
                 resta = cantidadA - cantidad
-                clienteid = form.cleaned_data.get('nombre', None).pk
+                clienteid = int(request.POST['nombre'])
                 precio = form.cleaned_data.get('precio_vendido', None)
                 cliente = Cliente.objects.get(pk=clienteid)
+                factura.nombre = cliente
                 saldoA = cliente.saldo
                 saldo = saldoA - precio*cantidad
                 if resta >= 0 and cantidadA > 0:
@@ -62,7 +64,8 @@ def create_sale_model_form(request):
                     factura.save()
             return redirect('facturav', factura=venta)
     return render(request, "clientes/ventas.html", {
-        'formset': CompraFormSet
+        'formset': CompraFormSet,
+        'clientes': clientes
     }
     )
 

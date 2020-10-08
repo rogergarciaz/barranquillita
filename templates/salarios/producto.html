@@ -1,11 +1,11 @@
 {% extends "base.html" %} {% block head_content %}
-<title>Cargar Asistencia</title>
+<title>Cargar Producto</title>
 {% endblock %} {% block container %}
 
 <div class="container">
   <div class="row justify-content-md-center" style="justify-content: center">
     <div class="col-6 pt-3 pb-3" id="profile-box">
-      <h4 class="mb-4">Carga la Asistencia!</h4>
+      <h4 class="mb-4">Carga el Producto!</h4>
 
       <form method="POST" id="produc">
         {% csrf_token %} {# Campo Area #}
@@ -16,11 +16,45 @@
             id="Area"
             class="form-control {% if form.area.errors %}is-invalid{% endif %}"
           >
-            <option value="Administracion">Administración</option>
-            <option value="Fijos">Por día</option>
+            <option value="Extrusion">Extrusion</option>
+            <option value="Sellado">Sellado</option>
           </select>
           <div class="invalid-feedback">
             {% for error in form.area.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Descripcion #}
+        <div class="form-group">
+          <label for="Descripcion">Descripción:</label>
+          <select
+            name="descripcion"
+            id="Descripcion"
+            class="selectpicker"
+            data-live-search="true"
+          >
+            <option>----</option>
+            {% for descripcion in descripciones %}
+            <option value="{{descripcion.pk}}">{{descripcion.nombre}}</option>
+            {% endfor %}
+          </select>
+
+          <div class="invalid-feedback">
+            {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Cantidad #}
+        <div class="form-group">
+          <input
+            class="form-control {% if form.cantidad.errors %}is-invalid{% endif %}"
+            type="number"
+            step="any"
+            name="cantidad"
+            placeholder="Cantidad"
+          />
+          <div class="invalid-feedback">
+            {% for error in form.cantidad.errors %}{{ error }}{% endfor %}
           </div>
         </div>
 
@@ -30,15 +64,12 @@
             class="form-control {% if form.precio_pagado.errors %}is-invalid{% endif %}"
             type="number"
             name="precio_pagado"
-            placeholder="Pagado por día"
+            placeholder="precio por unidad"
           />
           <div class="invalid-feedback">
             {% for error in form.precio_pagado.errors %}{{ error }}{% endfor %}
           </div>
         </div>
-
-        {# Campo Usuario #}
-        <input id="usuario" type="hidden" name="usuario" />
 
         {# Campo perfil #}
         <div class="form-group">
@@ -58,6 +89,9 @@
             {% for error in form.perfil.errors %}{{ error }}{% endfor %}
           </div>
         </div>
+
+        {# Campo Usuario #}
+        <input id="usuario" type="hidden" name="usuario" />
 
         {# Campo Nota #}
         <div class="form-group">

@@ -12,9 +12,33 @@ from salarios.forms import ProductionForm, FijoForm
 
 # Create your views here.
 @login_required
+def create_product(request):
+    usuarios = User.objects.all()
+    exclude_list = ['Sellado', 'Extrusion']
+    descripciones = Descripcion.objects.filter(area__in=exclude_list)
+    if request.method == 'POST':
+        form = ProductionForm(request.POST)
+        if form.is_valid():
+            produccion = form.save(commit=False)
+            produccion.agregado = request.user.username
+            produccion.save()
+            numero = form.cleaned_data.get('descripcion', None).pk
+            descripcion = Descripcion.objects.get(pk=numero)
+            cantidadA = descripcion.cantidad
+            descripcion.cantidad = cantidadA + \
+                form.cleaned_data.get('cantidad', None)
+            descripcion.save()
+            return redirect('producto')
+    else:
+        form = ProductionForm()
+    return render(request, 'salarios/producto.html', {'usuarios': usuarios, 'descripciones': descripciones})
+
+
+@login_required
 def create_production(request):
     usuarios = User.objects.all()
-    descripciones = Descripcion.objects.all()
+    exclude_list = ['Sellado', 'Extrusion']
+    descripciones = Descripcion.objects.exclude(area__in=exclude_list)
     if request.method == 'POST':
         form = ProductionForm(request.POST)
         if form.is_valid():

@@ -1,37 +1,8 @@
-{% extends "base.html" %} {% load static %} {% block head_content %}
-<title>Compra</title>
-<style>
-  select {
-    display: block;
-    width: 100%;
-    height: calc(1.5em + 0.75rem + 2px);
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-  input {
-    display: block;
-    width: 100%;
-    height: calc(1.5em + 0.75rem + 2px);
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-</style>
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block head_content %}
+<title>Compras</title>
 {% endblock %} {% block container %}
 
 <div class="container">
@@ -40,17 +11,65 @@
       <h4 class="mb-4">Carga la Compra!</h4>
 
       <form method="POST" id="vent">
-        {% csrf_token %} {{ formset.management_form }}
+        {% csrf_token %}
+        
+        {{ formset.management_form }}
 
-        <div id="form_set">
-          {% for form in formset.forms %} {{form.non_field_errors}}
-          {{form.errors}}
-          <table class="no_error">
-            {{ form }}
-          </table>
-          <br />
+        <div class="form-group">
+          <label for="Proveedor">Escoge el Proveedor:</label>
+          <select name="nombre" id="Proveedor" class="form-control">
+            <option>----</option>
+            {% for proveedor in proveedores %}
+            <option value="{{proveedor.pk}}">{{proveedor.nombre}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div id="form_set"> 
+          {% for form in formset.forms %}
+            {{form.non_field_errors}}
+            {{form.errors}}
+
+            {# Campo Descripcion #}
+            <div class="form-group">
+              <label>Descripción:</label>
+              {{form.descripcion|add_class:"selectpicker form-control"|attr:"data-live-search='true'" }}
+            </div>
+
+            {# Campo Cantidad #}
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="number"
+                step="any"
+                placeholder="Cantidad"
+                value="{{ form.cantidad }}"
+              />
+            </div>
+
+            {# Campo Precio Comprado #}
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="number"
+                step="any"
+                placeholder="Precio de Compra"
+                value="{{ form.precio_compra }}"
+              />
+            </div>
+
+            {# Campo Nota #}
+            <div class="form-group">
+              <input
+                class="form-control"
+                type="text"
+                placeholder="Nota"
+                value="{{ form.nota }}"
+              />
+            </div>
           {% endfor %}
         </div>
+
         <input
           onclick="add()"
           type="button"
@@ -59,13 +78,54 @@
           class="btn btn-default"
           style="width: 20%"
         />
+        <input
+          onclick="rem()"
+          type="button"
+          value="-"
+          id="rem_one"
+          class="btn btn-danger"
+          style="width: 20%"
+        />
         <div id="empty_form" style="display: none">
-          <hr />
-          <br />
-          <table class="no_error">
-            {{ formset.empty_form }}
-          </table>
-          <br />
+          {# Campo Descripcion #}
+          <div class="form-group">
+            <label>Descripción:</label>
+            <!-- {{formset.empty_form.descripcion|add_class:"selectpicker form-control"|attr:"data-live-search='true'" }}
+             -->
+            {{ formset.empty_form.descripcion }}
+          </div>
+
+          {# Campo Cantidad #}
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="number"
+              step="any"
+              placeholder="Cantidad"
+              value="{{ formset.empty_form.cantidad }}"
+            />
+          </div>
+
+          {# Campo Precio Comprado #}
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="number"
+              step="any"
+              placeholder="Precio de Compra"
+              value="{{ formset.empty_form.precio_compra }}"
+            />
+          </div>
+
+          {# Campo Nota #}
+          <div class="form-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Nota"
+              value="{{ formset.empty_form.nota }}"
+            />
+          </div>
         </div>
         <button type="submit" class="btn btn-primary btn-block mt-5">
           Cargar!
@@ -84,6 +144,20 @@
         .replace(/__prefix__/g, form_idx)
     );
     $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+  }
+  function rem() {
+    var form_idx = $('#id_form-TOTAL_FORMS').val();
+    var quantity = document.getElementsByName(`form-${parseInt(form_idx) - 1}-cantidad`);
+    var price = document.getElementsByName(`form-${parseInt(form_idx) - 1}-precio_compra`);
+    var description = document.getElementsByName(`form-${parseInt(form_idx) - 1}-descripcion`);
+    var note = document.getElementsByName(`form-${parseInt(form_idx) - 1}-nota`);
+    // form-1-cantidad
+    console.log(element);
+    element.parentNode.removeChild(quantity);
+    element.parentNode.removeChild(price);
+    element.parentNode.removeChild(description);
+    element.parentNode.removeChild(note);
+    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) - 1);
   }
 </script>
 
