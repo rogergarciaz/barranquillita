@@ -22,6 +22,7 @@ def create_product(request):
         if form.is_valid():
             produccion = form.save(commit=False)
             produccion.agregado = request.user.username
+            produccion.modificado_por = request.user.username
             produccion.save()
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = Descripcion.objects.get(pk=numero)
@@ -46,6 +47,7 @@ def create_production(request):
         if form.is_valid():
             produccion = form.save(commit=False)
             produccion.agregado = request.user.username
+            produccion.modificado_por = request.user.username
             produccion.save()
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = Descripcion.objects.get(pk=numero)
@@ -68,6 +70,7 @@ def create_assistance(request):
         if form.is_valid():
             asistencia = form.save(commit=False)
             asistencia.agregado = request.user.username
+            asistencia.modificado_por = request.user.username
             asistencia.save()
             return redirect('asistencia')
     else:

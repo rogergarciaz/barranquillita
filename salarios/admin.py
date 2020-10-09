@@ -8,9 +8,9 @@ from salarios.models import Fijo
 
 class ProduccionAdmin(admin.ModelAdmin):
     list_display = ('pk', 'usuario', 'descripcion', 'cantidad',
-                    'precio_pagado', 'area', 'nota', 'agregado', 'modificado', 'creado')
+                    'precio_pagado', 'area', 'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
-    list_editable = ('descripcion', 'cantidad', 'nota', 'precio_pagado')
+    # list_editable = ('descripcion', 'cantidad', 'nota', 'precio_pagado')
     search_fields = ('usuario__username', 'usuario__first_name',
                      'usuario__last_name', 'nota')
     list_filter = ('descripcion', 'area', 'usuario',
@@ -25,7 +25,7 @@ class ProduccionAdmin(admin.ModelAdmin):
         ('Informacion Extra', {
             'fields': (
                 ('nota',),
-                ('area', 'agregado', ),
+                ('area',),
             ),
         }),
         ('Metadata', {
@@ -35,12 +35,19 @@ class ProduccionAdmin(admin.ModelAdmin):
 
     readonly_fields = ('creado', 'modificado',)
 
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
+
 
 class FijoAdmin(admin.ModelAdmin):
     list_display = ('pk', 'usuario', 'precio_pagado', 'area',
-                    'nota', 'agregado', 'modificado', 'creado')
+                    'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
-    list_editable = ('nota', 'precio_pagado')
+    # list_editable = ('nota', 'precio_pagado')
     search_fields = ('usuario__username', 'usuario__first_name',
                      'usuario__last_name', 'nota')
     list_filter = ('area', 'usuario', 'precio_pagado', 'creado', 'modificado')
@@ -53,7 +60,7 @@ class FijoAdmin(admin.ModelAdmin):
         }),
         ('Informacion Extra', {
             'fields': (
-                ('nota', 'agregado',),
+                ('nota',),
             ),
         }),
         ('Metadata', {
@@ -62,6 +69,13 @@ class FijoAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('creado', 'modificado',)
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
 
 
 # Register your models here.

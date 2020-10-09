@@ -12,6 +12,7 @@ class Perfil(models.Model):
     nacimiento = models.DateField(blank=True, null=True)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
+    modificado_por = models.CharField(max_length=100, blank=False, default=None)
 
     def __str__(self):
         return '{} {} - {}'.format(

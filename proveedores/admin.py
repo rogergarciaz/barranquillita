@@ -6,9 +6,9 @@ from proveedores.models import Proveedor, Adquisicion
 
 
 class ProveedorAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'nombre', 'identificador', 'celular', 'direccion', 'saldo', 'nota', 'ciudad', 'modificado', 'creado')
+    list_display = ('pk', 'nombre', 'identificador', 'celular', 'direccion', 'saldo', 'nota', 'ciudad', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'nombre')
-    list_editable = ('celular', 'direccion', 'ciudad', 'saldo', 'nota',)
+    # list_editable = ('celular', 'direccion', 'ciudad', 'saldo', 'nota',)
     search_fields = ('nombre', 'identificador', 'celular', 'direccion', 'nota')
     list_filter = ('nombre', 'ciudad', 'saldo', 'creado', 'modificado')
     fieldsets = (
@@ -30,10 +30,17 @@ class ProveedorAdmin(admin.ModelAdmin):
 
     readonly_fields = ('creado', 'modificado',)
 
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
+
 class AdquisicionAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'nombre', 'descripcion', 'credito', 'cantidad', 'precio_compra', 'usuario', 'nota', 'compra', 'modificado', 'creado')
+    list_display = ('pk', 'nombre', 'descripcion', 'credito', 'cantidad', 'precio_compra', 'usuario', 'nota', 'compra', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'nombre')
-    list_editable = ('descripcion', 'cantidad', 'precio_compra', 'nota',)
+    # list_editable = ('descripcion', 'cantidad', 'precio_compra', 'nota',)
     search_fields = ('nombre', 'usuario', 'descripcion', 'compra', 'nota')
     list_filter = ('nombre', 'credito', 'usuario', 'descripcion', 'creado', 'modificado')
     fieldsets = (
@@ -55,6 +62,13 @@ class AdquisicionAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('creado', 'modificado',)
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
 
 # Register your models here.
 admin.site.register(Proveedor,ProveedorAdmin)

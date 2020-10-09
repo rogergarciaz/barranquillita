@@ -7,9 +7,9 @@ from prestamos.models import Prestamo
 
 class PrestamoAdmin(admin.ModelAdmin):
     list_display = ('pk', 'usuario', 'perfil', 'descripcion', 'valor', 'cuotas',
-                    'cuotas_debidas', 'nota', 'agregado', 'modificado', 'creado')
+                    'cuotas_debidas', 'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
-    list_editable = ('nota', 'valor', 'cuotas', 'cuotas_debidas')
+    # list_editable = ('nota', 'valor', 'cuotas', 'cuotas_debidas')
     search_fields = ('usuario__username', 'usuario__first_name',
                      'usuario__last_name', 'nota')
     list_filter = ('descripcion', 'cuotas_debidas',
@@ -19,7 +19,7 @@ class PrestamoAdmin(admin.ModelAdmin):
             'fields': (
                 ('usuario', 'perfil',),
                 ('descripcion',),
-                ('valor', 'agregado',),
+                ('valor',),
             ),
         }),
         ('Informacion Extra', {
@@ -34,6 +34,13 @@ class PrestamoAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('creado', 'modificado',)
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
 
 
 # Register your models here.

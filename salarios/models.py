@@ -18,6 +18,7 @@ class Produccion(models.Model):
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
     agregado = models.CharField(max_length=100, blank=False, default=None)
+    modificado_por = models.CharField(max_length=100, blank=False, default=None)
 
     def __str__(self):
         return '{} {} produjo {} de {} el {}'.format(
@@ -39,6 +40,7 @@ class Fijo(models.Model):
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
     agregado = models.CharField(max_length=100, blank=False, default=None)
+    modificado_por = models.CharField(max_length=100, blank=False, default=None)
 
     def __str__(self):
         return '{} {} hizo {} pesos el {}'.format(

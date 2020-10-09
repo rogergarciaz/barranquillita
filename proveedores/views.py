@@ -28,6 +28,7 @@ def create_adquisition_model_form(request):
                 factura.usuario = request.user
                 factura.perfil = request.user.perfil
                 factura.compra = compra
+                factura.modificado_por = request.user.username
                 descripcionid = form.cleaned_data.get('descripcion', None).pk
                 descripcion = Descripcion.objects.get(pk=descripcionid)
                 cantidadA = descripcion.cantidad

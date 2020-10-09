@@ -15,6 +15,7 @@ class Prestamo(models.Model):
     modificado = models.DateTimeField(auto_now=True)
     nota = models.CharField(max_length=100, blank=True)
     agregado = models.CharField(max_length=100, blank=False, default=None)
+    modificado_por = models.CharField(max_length=100, blank=False, default=None)
 
     def __str__(self):
         valor = self.valor/self.cuotas

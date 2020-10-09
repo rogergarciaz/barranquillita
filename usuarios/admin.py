@@ -9,16 +9,16 @@ from usuarios.models import Perfil
 # Register your models here.
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'usuario', 'identificador', 'celular','seguro', 'recordar', 'foto')
+    list_display = ('pk', 'usuario', 'identificador', 'celular','seguro', 'recordar', 'foto', 'nacimiento', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
-    list_editable = ('celular', 'foto', 'seguro', 'recordar')
+    # list_editable = ('celular', 'foto', 'seguro', 'recordar')
     search_fields = ('usuario__username', 'usuario__first_name', 'usuario__last_name', 'identificador')
     list_filter = ('usuario__is_active', 'usuario__is_staff', 'creado')
     fieldsets = (
         ('Perfil', {
             'fields' : (
                 ('usuario', 'identificador',),
-                ('foto',),
+                ('foto', 'nacimiento',),
             ),
         }),
         ('Informacion Extra', {
@@ -33,6 +33,13 @@ class PerfilAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ('creado', 'modificado',)
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
 
 class PerfilInline(admin.StackedInline):
     model = Perfil

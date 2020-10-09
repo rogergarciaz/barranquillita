@@ -32,6 +32,7 @@ def create_sale_model_form(request):
                 factura = form.save(commit=False)
                 factura.usuario = request.user
                 factura.perfil = request.user.perfil
+                factura.modificado_por = request.user.username
                 factura.venta = venta
                 numero = form.cleaned_data.get('descripcion', None).pk
                 descripcion = Descripcion.objects.get(pk=numero)

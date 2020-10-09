@@ -9,10 +9,11 @@ class Sueldo(models.Model):
         'usuarios.Perfil', on_delete=models.CASCADE, default=None)
     nota = models.CharField(max_length=100, blank=True)
     sueldo = models.PositiveIntegerField(blank=False)
-    valor = models.PositiveIntegerField(blank=False)
+    valor = models.FloatField(blank=False)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
     agregado = models.CharField(max_length=100, blank=False, default=None)
+    modificado_por = models.CharField(max_length=100, blank=False, default=None)
 
     def __str__(self):
         return 'El sueldo el {} de {} {} es de {} pesos'.format(
@@ -32,13 +33,14 @@ class Descripcion(models.Model):
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
     area = models.CharField(max_length=100, blank=False, default='Sellado')
+    modificado_por = models.CharField(max_length=100, blank=False, default=None)
 
     def __str__(self):
         if self.cantidad > 0.0 and (self.area == 'Extrusion' or self.area == 'Sellado'):
             return '{}'.format(self.nombre)
-        elif self.cantidad <= 0.0 and (self.area != 'Extrusion' or self.area != 'Sellado'):
+        elif self.cantidad <= 0.0 and (self.area == 'Extrusion' or self.area == 'Sellado'):
             return 'No hay {}'.format(self.nombre)
-        # elif self.cantidad <= 0.0 and (self.area != 'Extrusion' or self.area != 'Sellado'):
-        #     return 'No vender {}'.format(self.nombre)
+        elif self.cantidad > 0.0 and (self.area != 'Extrusion' and self.area != 'Sellado'):
+            return 'ZZZ {}'.format(self.nombre)
         else:
-            return 'No vender {}'.format(self.nombre)
+            return 'ZZZ No hay {}'.format(self.nombre)

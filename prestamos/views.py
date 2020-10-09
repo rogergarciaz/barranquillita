@@ -13,9 +13,8 @@ def create_loan(request):
         form = PrestamoForm(request.POST)
         if form.is_valid():
             prestamo = form.save(commit=False)
-            import pdb
-            pdb.set_trace()
             prestamo.agregado = request.user.username
+            prestamo.modificado_por = request.user.username
             prestamo.save()
             return redirect('prestamo')
     else:
