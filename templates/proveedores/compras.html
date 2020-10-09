@@ -17,7 +17,7 @@
 
         <div class="form-group">
           <label for="Proveedor">Escoge el Proveedor:</label>
-          <select name="nombre" id="Proveedor" class="form-control">
+          <select name="nombre" id="Proveedor" class="selectpicker form-control" data-live-search='true'>
             <option>----</option>
             {% for proveedor in proveedores %}
             <option value="{{proveedor.pk}}">{{proveedor.nombre}}</option>
@@ -67,6 +67,8 @@
                 value="{{ form.nota }}"
               />
             </div>
+
+            <hr style="border-top: 3px double #8c8b8b;"/>
           {% endfor %}
         </div>
 
@@ -86,7 +88,9 @@
           class="btn btn-danger"
           style="width: 20%"
         />
+
         <div id="empty_form" style="display: none">
+          
           {# Campo Descripcion #}
           <div class="form-group">
             <label>Descripción:</label>
@@ -126,6 +130,8 @@
               value="{{ formset.empty_form.nota }}"
             />
           </div>
+
+          <hr style="border-top: 3px double #8c8b8b;"/>
         </div>
         <button type="submit" class="btn btn-primary btn-block mt-5">
           Cargar!

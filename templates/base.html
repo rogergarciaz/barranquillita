@@ -16,6 +16,19 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}" />
     <!-- Latest compiled and minified JavaScript -->
     <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+    <!-- Datepicker -->
+    <!-- XDSoft DateTimePicker -->
+    <link
+      rel="stylesheet"
+      href="{% static 'css/jquery.datetimepicker.min.css' %}"
+      integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y="
+      crossorigin="anonymous"
+    />
+    <script
+      src="{% static 'js/jquery.datetimepicker.full.min.js' %}"
+      integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     {% if request.user.is_authenticated %} {% include "nav.html" %} {% endif %}

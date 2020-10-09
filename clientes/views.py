@@ -26,8 +26,9 @@ def create_sale_model_form(request):
     if request.method == 'POST':
         venta = Compra.objects.last().venta + 1
         formset = CompraFormSet(request.POST)
-        if formset.is_valid():
-            for form in formset:
+        # if formset.is_valid():
+        for form in formset:
+            if form.is_valid():
                 factura = form.save(commit=False)
                 factura.usuario = request.user
                 factura.perfil = request.user.perfil
@@ -62,7 +63,7 @@ def create_sale_model_form(request):
                     cliente.saldo = saldo
                     cliente.save()
                     factura.save()
-            return redirect('facturav', factura=venta)
+        return redirect('facturav', factura=venta)
     return render(request, "clientes/ventas.html", {
         'formset': CompraFormSet,
         'clientes': clientes
@@ -74,6 +75,7 @@ def create_sale_model_form(request):
 def create_bill(request, factura):
     ventas = Compra.objects.filter(venta=factura)
     cliente = ventas.last().nombre
+    fecha = ventas.last().creado
     subtotal = []
     conteo = 1
     total = 0
@@ -92,6 +94,7 @@ def create_bill(request, factura):
         'cliente': cliente,
         'venta': factura,
         'total': total,
+        'fecha': fecha.strftime('%Y-%m-%d %H:%M'),
     }
     )
 
@@ -101,10 +104,57 @@ def see_consolidate(request):
     tabla = False
     fechaF = datetime.date.today()
     dia = datetime.timedelta(days=1)
-    fechaI = fechaF - dia
+    fechaI = fechaF
     fechaF = fechaF + dia
     ventas = Compra.objects.filter(creado__range=[fechaI, fechaF])
+    tabla = True
+    credito = 0
+    efectivo = 0
+    total = 0
+    subtotal = []
+    conteo = 1
+    ventas = Compra.objects.filter(
+        Q(creado__range=[fechaI, fechaF])
+    )
+    for venta in ventas:
+        copia = model_to_dict(venta).copy()
+        descrip = Descripcion.objects.get(pk=venta.descripcion.pk)
+        copia['descripcion'] = descrip.nombre
+        usua = User.objects.get(pk=venta.usuario.pk)
+        copia['usuario'] = usua.get_full_name()
+        clien = Cliente.objects.get(pk=venta.nombre.pk)
+        copia['nombre'] = clien.nombre
+        valor = venta.cantidad * venta.precio_vendido
+        if 'credito' in venta.nota:
+            credito = credito + valor
+            total = total + valor
+            copia['credito'] = 'Si'
+        else:
+            efectivo = efectivo + valor
+            total = total + valor
+            copia['credito'] = 'No'
+        copia['total'] = valor
+        copia['numero'] = conteo
+        subtotal.append(copia)
+        conteo += 1
+    return render(request, "clientes/acumulado.html", {
+        'ventas': subtotal,
+        'tabla': tabla,
+        'credito': credito,
+        'efectivo': efectivo,
+        'total': total,
+    }
+    )
+
+@login_required
+def see_consolidateDates(request):
+    tabla = False
+    ventas = []
     if request.method == 'POST':
+        initialDate = request.POST['fechaI'] #str '2020/10/08 17:02'
+        inicialF = datetime.datetime.strptime(initialDate,"%Y/%m/%d %H:%M")
+        finalDate = request.POST['fechaF']
+        finalF = datetime.datetime.strptime(finalDate,"%Y/%m/%d %H:%M")
         tabla = True
         credito = 0
         efectivo = 0
@@ -112,7 +162,7 @@ def see_consolidate(request):
         subtotal = []
         conteo = 1
         ventas = Compra.objects.filter(
-            Q(creado__range=[fechaI, fechaF])
+            Q(creado__range=[inicialF, finalF])
         )
         for venta in ventas:
             copia = model_to_dict(venta).copy()

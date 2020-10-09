@@ -4,14 +4,24 @@
 <!-- Esto se mostrara si el usuario tiene permisos -->
 {% if request.user.is_staff is True %}
 <div class="container">
-  <form action="{% url 'acumulado' %}" method="POST">
+  <form action="{% url 'acumuladoF' %}" method="POST">
     {% csrf_token %}
+    <div class="row">
+      <div class="col text-center">
+        <label>Fecha Inicial</label>
+        <input id="datetimepicker1" name="fechaI" type="text">
+        <label>Fecha Final</label>
+        <input id="datetimepicker2" name="fechaF" type="text">
+      </div>
+    </div>
+    <br />
     <div class="row">
       <div class="col text-center">
         <button type="submit" class="btn btn-primary">Generar</button>
       </div>
     </div>
   </form>
+  <a class="btn btn-primary" href="{% url 'acumulado' %}">Diario</a>
   <br />
   <br />
   {% if tabla %}
@@ -64,5 +74,15 @@
 {% if request.user.is_staff is False %} {% include "permisos.html" %}
 <!-- Esto se mostrara si el usuario no tiene permisos -->
 {% endif%}
+<script>
+  $(function () {
+    $("#datetimepicker1").datetimepicker();
+  });
+</script>
+<script>
+  $(function () {
+    $("#datetimepicker2").datetimepicker();
+  });
+</script>
 <!-- Esto finalizara el bloque del template -->
 {% endblock %}

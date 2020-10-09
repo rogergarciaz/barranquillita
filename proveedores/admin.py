@@ -6,15 +6,15 @@ from proveedores.models import Proveedor, Adquisicion
 
 
 class ProveedorAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'nombre', 'celular', 'direccion', 'saldo', 'nota', 'ciudad', 'modificado', 'creado')
+    list_display = ('pk', 'nombre', 'identificador', 'celular', 'direccion', 'saldo', 'nota', 'ciudad', 'modificado', 'creado')
     list_display_links = ('pk', 'nombre')
     list_editable = ('celular', 'direccion', 'ciudad', 'saldo', 'nota',)
-    search_fields = ('nombre','celular', 'direccion', 'nota')
+    search_fields = ('nombre', 'identificador', 'celular', 'direccion', 'nota')
     list_filter = ('nombre', 'ciudad', 'saldo', 'creado', 'modificado')
     fieldsets = (
         ('Proveedor', {
             'fields' : (
-                ('nombre', 'celular'),
+                ('nombre', 'identificador', 'celular'),
                 ('direccion', 'ciudad'),
             ),
         }),
@@ -31,11 +31,11 @@ class ProveedorAdmin(admin.ModelAdmin):
     readonly_fields = ('creado', 'modificado',)
 
 class AdquisicionAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'nombre', 'descripcion', 'cantidad', 'precio_compra', 'usuario', 'nota', 'compra', 'modificado', 'creado')
+    list_display = ('pk', 'nombre', 'descripcion', 'credito', 'cantidad', 'precio_compra', 'usuario', 'nota', 'compra', 'modificado', 'creado')
     list_display_links = ('pk', 'nombre')
     list_editable = ('descripcion', 'cantidad', 'precio_compra', 'nota',)
     search_fields = ('nombre', 'usuario', 'descripcion', 'compra', 'nota')
-    list_filter = ('nombre', 'usuario', 'descripcion', 'creado', 'modificado')
+    list_filter = ('nombre', 'credito', 'usuario', 'descripcion', 'creado', 'modificado')
     fieldsets = (
         ('Adquisicion', {
             'fields' : (
@@ -46,7 +46,7 @@ class AdquisicionAdmin(admin.ModelAdmin):
         ('Informacion Extra', {
             'fields' : (
                 ('usuario', 'perfil'),
-                ('compra','nota')
+                ('compra', 'credito', 'nota')
             ),
         }),
         ('Metadata', {

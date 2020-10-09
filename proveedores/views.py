@@ -21,11 +21,11 @@ def create_adquisition_model_form(request):
     if request.method == 'POST':
         compra = Adquisicion.objects.last().compra + 1
         formset = AdquisicionFormSet(request.POST)
-        if formset.is_valid():
-            for form in formset:
+        # if formset.is_valid():
+        for form in formset:
+            if form.is_valid():
                 factura = form.save(commit=False)
                 factura.usuario = request.user
-                import pdb; pdb.set_trace()
                 factura.perfil = request.user.perfil
                 factura.compra = compra
                 descripcionid = form.cleaned_data.get('descripcion', None).pk
@@ -44,7 +44,7 @@ def create_adquisition_model_form(request):
                 proveedor.save()
                 descripcion.save()
                 factura.save()
-            return redirect('facturac', factura=compra)
+        return redirect('facturac', factura=compra)
     return render(request, "proveedores/compras.html", {
         'proveedores': proveedores,
         'formset': AdquisicionFormSet
@@ -56,6 +56,7 @@ def create_adquisition_model_form(request):
 def create_bill(request, factura):
     compras = Adquisicion.objects.filter(compra=factura)
     proveedor = compras.last().nombre
+    fecha = compras.last().creado
     subtotal = []
     conteo = 1
     total = 0
@@ -74,5 +75,6 @@ def create_bill(request, factura):
         'proveedor': proveedor,
         'compra': factura,
         'total': total,
+        'fecha': fecha.strftime('%Y-%m-%d %H:%M'),
     }
     )

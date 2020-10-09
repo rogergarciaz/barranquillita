@@ -105,6 +105,8 @@ def see_payment(request, nomina):
         'sueldos': subtotal,
         'nomina': nomina,
         'total': total,
+        'fechaIn': fechaI.strftime('%Y-%m-%d %H:%M'),
+        'fechaFi': fechaF.strftime('%Y-%m-%d %H:%M'),
     }
     )
 

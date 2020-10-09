@@ -17,7 +17,7 @@
 
         <div class="form-group">
           <label for="Cliente">Escoge el Cliente:</label>
-          <select name="nombre" id="Cliente" class="form-control">
+          <select name="nombre" id="Cliente" class="selectpicker form-control" data-live-search='true'>
             <option>----</option>
             {% for cliente in clientes %}
             <option value="{{cliente.pk}}">{{cliente.nombre}}</option>
@@ -67,6 +67,8 @@
                 value="{{ form.nota }}"
               />
             </div>
+
+            <hr style="border-top: 3px double #8c8b8b;"/>
           {% endfor %}
         </div>
 
@@ -118,6 +120,8 @@
               value="{{ formset.empty_form.nota }}"
             />
           </div>
+
+          <hr style="border-top: 3px double #8c8b8b;"/>
         </div>
         <button type="submit" class="btn btn-primary btn-block mt-5">
           Cargar!

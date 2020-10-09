@@ -47,7 +47,8 @@
             name="perfil"
             onchange="changeUser()"
             id="Empleados"
-            class="form-control {% if form.perfil.errors %}is-invalid{% endif %}"
+            class="selectpicker form-control"
+            data-live-search="true"
           >
             <option>----</option>
             {% for usuario in usuarios %}

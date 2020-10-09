@@ -32,6 +32,7 @@ urlpatterns = [
     path('clientes/factura/<int:factura>/',
          clientes_views.create_bill, name='facturav'),
     path('clientes/acumulado', clientes_views.see_consolidate, name='acumulado'),
+    path('clientes/acumulados', clientes_views.see_consolidateDates, name='acumuladoF'),
     path('proveedores/compras',
          proveedores_views.create_adquisition_model_form, name='compras'),
     path('proveedores/factura/<int:factura>/',

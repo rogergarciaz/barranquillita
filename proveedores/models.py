@@ -13,6 +13,7 @@ class Adquisicion(models.Model):
     compra = models.PositiveIntegerField(blank=False)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
+    credito = models.BooleanField(blank=False, default=False)
 
     def __str__(self):
         return '{} {} compro {} de {} el {}'.format(
@@ -25,6 +26,7 @@ class Adquisicion(models.Model):
 
 class Proveedor(models.Model):
     nombre = models.CharField(max_length=100, blank=False)
+    identificador = models.CharField(max_length=100, blank=False, default=None)
     celular = models.CharField(max_length=20, blank=True)
     direccion = models.CharField(max_length=100, blank=True)
     ciudad = models.CharField(max_length=100, blank=True)
