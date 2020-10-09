@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # Models
 from sueldos.models import Descripcion
-
+from usuarios.models import Perfil
 # Forms
 from salarios.forms import ProductionForm, FijoForm
 
@@ -13,7 +13,8 @@ from salarios.forms import ProductionForm, FijoForm
 # Create your views here.
 @login_required
 def create_product(request):
-    usuarios = User.objects.all()
+    usuarios = Perfil.objects.all()
+    #usuarios = User.objects.all()
     exclude_list = ['Sellado', 'Extrusion']
     descripciones = Descripcion.objects.filter(area__in=exclude_list)
     if request.method == 'POST':
@@ -36,7 +37,8 @@ def create_product(request):
 
 @login_required
 def create_production(request):
-    usuarios = User.objects.all()
+    usuarios = Perfil.objects.all()
+    #usuarios = User.objects.all()
     exclude_list = ['Sellado', 'Extrusion']
     descripciones = Descripcion.objects.exclude(area__in=exclude_list)
     if request.method == 'POST':
@@ -59,7 +61,8 @@ def create_production(request):
 
 @login_required
 def create_assistance(request):
-    usuarios = User.objects.all()
+    usuarios = Perfil.objects.all()
+    #usuarios = User.objects.all()
     if request.method == 'POST':
         form = FijoForm(request.POST)
         if form.is_valid():

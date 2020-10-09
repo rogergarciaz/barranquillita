@@ -20,7 +20,7 @@
           <select name="nombre" id="Cliente" class="selectpicker form-control" data-live-search='true'>
             <option>----</option>
             {% for cliente in clientes %}
-            <option value="{{cliente.pk}}">{{cliente.nombre}}</option>
+            <option value="{{cliente.pk}}">{{cliente}}</option>
             {% endfor %}
           </select>
         </div>
@@ -45,6 +45,12 @@
                 placeholder="Cantidad"
                 value="{{ form.cantidad }}"
               />
+            </div>
+
+            {# Campo Credito #}
+            <div class="form-group">
+              <label>Crédito:</label>
+              {{ form.credito }}
             </div>
 
             {# Campo Precio Vendido #}
@@ -98,6 +104,12 @@
               placeholder="Cantidad"
               value="{{ formset.empty_form.cantidad }}"
             />
+          </div>
+
+          {# Campo Credito #}
+          <div class="form-group">
+            <label>Crédito:</label>
+            {{ formset.empty_form.credito }}
           </div>
 
           {# Campo Precio Vendido #}

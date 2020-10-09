@@ -9,15 +9,16 @@ from usuarios.models import Perfil
 # Register your models here.
 @admin.register(Perfil)
 class PerfilAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'usuario', 'celular','seguro', 'recordar', 'foto')
+    list_display = ('pk', 'usuario', 'identificador', 'celular','seguro', 'recordar', 'foto')
     list_display_links = ('pk', 'usuario')
     list_editable = ('celular', 'foto', 'seguro', 'recordar')
-    search_fields = ('usuario__username', 'usuario__first_name', 'usuario__last_name')
+    search_fields = ('usuario__username', 'usuario__first_name', 'usuario__last_name', 'identificador')
     list_filter = ('usuario__is_active', 'usuario__is_staff', 'creado')
     fieldsets = (
         ('Perfil', {
             'fields' : (
-                ('usuario', 'foto'),
+                ('usuario', 'identificador',),
+                ('foto',),
             ),
         }),
         ('Informacion Extra', {

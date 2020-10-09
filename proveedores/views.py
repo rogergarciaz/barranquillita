@@ -65,6 +65,10 @@ def create_bill(request, factura):
         descrip = Descripcion.objects.get(pk=compra.descripcion.pk)
         copia['descripcion'] = descrip.nombre
         pesos = compra.precio_compra * compra.cantidad
+        if compra.credito == True:
+            copia['credito'] = 'Si'
+        else:
+            copia['credito'] = 'No'
         copia['total'] = pesos
         copia['numero'] = conteo
         subtotal.append(copia)

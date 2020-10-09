@@ -20,7 +20,7 @@
           <select name="nombre" id="Proveedor" class="selectpicker form-control" data-live-search='true'>
             <option>----</option>
             {% for proveedor in proveedores %}
-            <option value="{{proveedor.pk}}">{{proveedor.nombre}}</option>
+            <option value="{{proveedor.pk}}">{{proveedor}}</option>
             {% endfor %}
           </select>
         </div>
@@ -45,6 +45,12 @@
                 placeholder="Cantidad"
                 value="{{ form.cantidad }}"
               />
+            </div>
+
+            {# Campo Credito #}
+            <div class="form-group">
+              <label>Crédito:</label>
+              {{ form.credito }}
             </div>
 
             {# Campo Precio Comprado #}
@@ -108,6 +114,12 @@
               placeholder="Cantidad"
               value="{{ formset.empty_form.cantidad }}"
             />
+          </div>
+
+          {# Campo Credito #}
+          <div class="form-group">
+            <label>Crédito:</label>
+            {{ formset.empty_form.credito }}
           </div>
 
           {# Campo Precio Comprado #}

@@ -46,22 +46,25 @@ def create_sale_model_form(request):
                 saldo = saldoA - precio*cantidad
                 if resta >= 0 and cantidadA > 0:
                     descripcion.cantidad = resta
-                    cliente.saldo = saldo
-                    cliente.save()
+                    if factura.credito == True:
+                        cliente.saldo = saldo
+                        cliente.save()
                     descripcion.save()
                     factura.save()
                 elif resta < 0 and cantidadA > 0:
                     descripcion.cantidad = 0
                     descripcion.save()
-                    cliente.saldo = saldo
-                    cliente.save()
+                    if factura.credito == True:
+                        cliente.saldo = saldo
+                        cliente.save()
                     factura.cantidad = cantidadA
                     factura.save()
                 else:
                     descripcion.cantidad = resta
                     descripcion.save()
-                    cliente.saldo = saldo
-                    cliente.save()
+                    if factura.credito == True:
+                        cliente.saldo = saldo
+                        cliente.save()
                     factura.save()
         return redirect('facturav', factura=venta)
     return render(request, "clientes/ventas.html", {
@@ -84,6 +87,10 @@ def create_bill(request, factura):
         descrip = Descripcion.objects.get(pk=venta.descripcion.pk)
         copia['descripcion'] = descrip.nombre
         pesos = venta.precio_vendido * venta.cantidad
+        if venta.credito == True:
+            copia['credito'] = 'Si'
+        else:
+            copia['credito'] = 'No'
         copia['total'] = pesos
         copia['numero'] = conteo
         subtotal.append(copia)
@@ -121,11 +128,11 @@ def see_consolidate(request):
         descrip = Descripcion.objects.get(pk=venta.descripcion.pk)
         copia['descripcion'] = descrip.nombre
         usua = User.objects.get(pk=venta.usuario.pk)
-        copia['usuario'] = usua.get_full_name()
+        copia['usuario'] = usua
         clien = Cliente.objects.get(pk=venta.nombre.pk)
-        copia['nombre'] = clien.nombre
+        copia['nombre'] = clien
         valor = venta.cantidad * venta.precio_vendido
-        if 'credito' in venta.nota:
+        if venta.credito == True:
             credito = credito + valor
             total = total + valor
             copia['credito'] = 'Si'
@@ -169,11 +176,11 @@ def see_consolidateDates(request):
             descrip = Descripcion.objects.get(pk=venta.descripcion.pk)
             copia['descripcion'] = descrip.nombre
             usua = User.objects.get(pk=venta.usuario.pk)
-            copia['usuario'] = usua.get_full_name()
+            copia['usuario'] = usua
             clien = Cliente.objects.get(pk=venta.nombre.pk)
-            copia['nombre'] = clien.nombre
+            copia['nombre'] = clien
             valor = venta.cantidad * venta.precio_vendido
-            if 'credito' in venta.nota:
+            if venta.credito == True:
                 credito = credito + valor
                 total = total + valor
                 copia['credito'] = 'Si'

@@ -16,7 +16,7 @@
       <br /><br />
       <h2><strong>Ciudad:</strong> Barranquilla, Atlántico - Colombia</h2>
       <h2><strong>Fecha de Compra:</strong> {{ fecha }}</h2>
-      <h2><strong>Factura #:</strong> {{ venta }}</h2>
+      <h2><strong>Factura de Venta:</strong> {{ venta }}</h2>
       <h2><strong>Cliente:</strong> {{ cliente }}</h2>
       <br />
       <div class="table-responsive">
@@ -28,6 +28,7 @@
               <th scope="col">Cantidad</th>
               <th scope="col">Precio Unitario</th>
               <th scope="col">Subotal</th>
+              <th scope="col">Crédito</th>
             </tr>
           </thead>
           <tbody>
@@ -38,6 +39,7 @@
               <td>{{ venta.cantidad }}</td>
               <td>{{ venta.precio_vendido }}</td>
               <td>{{ venta.total }}</td>
+              <td>{{ venta.credito }}</td>
             </tr>
             {% endfor %}
             <tr>

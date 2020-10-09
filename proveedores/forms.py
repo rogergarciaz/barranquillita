@@ -9,6 +9,6 @@ class AdquisicionForm(forms.ModelForm):
     class Meta:
         model = Adquisicion
         fields = (
-            'descripcion', 'cantidad',
+            'descripcion', 'cantidad', 'credito',
             'precio_compra', 'nota'
         )

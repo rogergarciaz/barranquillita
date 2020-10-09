@@ -36,4 +36,4 @@ class Proveedor(models.Model):
     modificado = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '{}'.format(self.nombre)
+        return '{} - {}'.format(self.nombre, self.identificador)
