@@ -4,7 +4,7 @@
 <!-- Esto se mostrara si el usuario tiene permisos -->
 {% if request.user.is_staff is True %}
 <div class="container">
-  <form action="{% url 'acumuladoF' %}" method="POST">
+  <form action="{% url 'acumuladoFP' %}" method="POST">
     {% csrf_token %}
     <div class="row">
       <div class="col text-center">
@@ -21,7 +21,7 @@
       </div>
     </div>
   </form>
-  <a class="btn btn-primary" href="{% url 'acumulado' %}">Diario</a>
+  <a class="btn btn-primary" href="{% url 'acumuladoP' %}">Diario</a>
   <br />
   <br />
   {% if tabla %}
@@ -31,8 +31,8 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Descripción</th>
-          <th scope="col">Cliente</th>
-          <th scope="col">Vendedor</th>
+          <th scope="col">Proveedor</th>
+          <th scope="col">Comprador</th>
           <th scope="col">Crédito</th>
           <th scope="col">Cancelado</th>
           <th scope="col">Cantidad</th>
@@ -41,17 +41,17 @@
         </tr>
       </thead>
       <tbody>
-        {% for venta in ventas %}
+        {% for compra in compras %}
         <tr>
-          <th scope="row">{{ venta.numero }}</th>
-          <td>{{ venta.descripcion }}</td>
-          <td>{{ venta.nombre }}</td>
-          <td>{{ venta.usuario }}</td>
-          <td>{{ venta.credito }}</td>
-          <td>{{ venta.credito_cancelado }}</td>
-          <td>{{ venta.cantidad }}</td>
-          <td>{{ venta.precio_vendido }}</td>
-          <td>{{ venta.total }}</td>
+          <th scope="row">{{ compra.numero }}</th>
+          <td>{{ compra.descripcion }}</td>
+          <td>{{ compra.nombre }}</td>
+          <td>{{ compra.usuario }}</td>
+          <td>{{ compra.credito }}</td>
+          <td>{{ compra.credito_cancelado }}</td>
+          <td>{{ compra.cantidad }}</td>
+          <td>{{ compra.precio_vendido }}</td>
+          <td>{{ compra.total }}</td>
         </tr>
         {% endfor %}
         <tr>

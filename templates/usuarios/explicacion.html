@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block head_content %}
+<title>Explicacon</title>
+{% endblock %} {% block container %} {% load static %}
+<!-- Esto se mostrara si el usuario tiene permisos -->
+{% if request.user.is_staff is True %}
+<div class="container">
+  <h1>Explicación de la App</h1>
+  <p>
+    En la parte superior están los enlaces a las diferentes acciones 
+    que puedes realizar en la aplicación. Si no los ves y estas usando 
+    una pantalla pequeña, debes darle en la esquina superior derecha 
+    donde están las tres rayas. Ahora explicaremos cada enlace y que 
+    puedes hacer en ellas.
+  </p>
+  <h2>Pupiplast Logo</h2>
+    <p>
+      Aqui podrás ver la expliación de la aplicación.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Imagén de Perfil</h2>
+    <p>
+      Aqui podrás editar tu perfil, cargando una foto y tu celular.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Producto</h2>
+    <p>
+      Aqui podrás cargar los productos, que son aquellos que se 
+      venden a los clientes. Las areas de Sellado y Extrusión 
+      cargan su producción en este lugar.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Producción</h2>
+    <p>
+      Aqui podrás cargar los materiales, que son aquellos que 
+      se usan en el proceso de manufactura final. Las areas de 
+      Lavado, Aglutinado y Peletizado cargan su producción en 
+      este lugar.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Obtener</h2>
+    <p>
+      Aqui podrás dejar constancia de los materiales que usas, 
+      que son aquellos que obtienes para realizar un producto 
+      de venta. Si hay algo que usaste para tu labor aquí 
+      se registra.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Asistencia</h2>
+    <p>
+      Aqui podrás dejar constancia de los empleados que 
+      asistieron a laborary so forma de pago es por día.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Prestar</h2>
+    <p>
+      Aqui podrás realizar prestamos. En cuotas debidas 
+      debes ingresar la cantidad de cuotas que no hallan 
+      sido pagadas.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Nomina</h2>
+    <p>
+      Aqui podrás generar la nomina de la empresa.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Ventas</h2>
+    <p>
+      Aqui podrás realizar las facturación de las 
+      ventas. Si deseas ver una factura especifica 
+      en la url escribe /clientes/factura/X/ donde 
+      X representa el número de la factura a 
+      consultar.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Compras</h2>
+    <p>
+      Aqui podrás realizar las facturación de las 
+      compras. Si deseas ver una factura especifica 
+      en la url escribe /proveedores/factura/X/ 
+      donde X representa el número de la factura a 
+      consultar.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Acumulado V</h2>
+    <p>
+      Aqui podrás ver el acumulado de ventas, 
+      diario y para un rango de fecha selecionada. 
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Acumulado C</h2>
+    <p>
+      Aqui podrás ver el acumulado de compras, 
+      diario y para un rango de fecha selecionada. 
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Buscar C</h2>
+    <p>
+      Aqui podrás ver la cantidad y precios de los 
+      materiales que se usan en la manufactura.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Buscar V</h2>
+    <p>
+      Aqui podrás ver la cantidad y precios de los 
+      productos que se usan en las ventas.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Cancela-Paga C</h2>
+    <p>
+      Aqui podrás cancelar ó pagar ya sea una 
+      factura ó un itém especifico de compra. 
+      Al cancelar la factura quedará inactiva.
+      Al pagar se está pagando el crédito en 
+      uno o varios items.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Cancela-Paga V</h2>
+    <p>
+      Aqui podrás cancelar ó pagar ya sea una 
+      factura ó un itém especifico de venta. 
+      Al cancelar la factura quedará inactiva.
+      Al pagar se está pagando el crédito en 
+      uno o varios items.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+  <h2>Salir</h2>
+    <p>
+      Aqui podrás cerrar sesión en la aplicación.
+    </p>
+  <br />
+  <hr style="border-top: 3px double #8c8b8b;"/>
+
+</div>
+{% endif %}
+<!-- Esto finalizara el bloque del template -->
+{% endblock %}

@@ -18,7 +18,7 @@ def login_view(request):
         usuario = authenticate(request, username=username, password=password)
         if usuario:
             login(request, usuario)
-            return redirect('profile')
+            return redirect('explicacion')
         else:
             return render(request, 'usuarios/login.html', {'error': 'Usuario y/o Contraseña Invalidos'})
     return render(request, 'usuarios/login.html')
@@ -49,3 +49,11 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+@login_required
+def explanation_view(request):
+    return render(
+        request=request,
+        template_name='usuarios/explicacion.html',
+    )

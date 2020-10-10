@@ -6,25 +6,26 @@ from clientes.models import Cliente, Compra
 
 
 class ClienteAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'nombre', 'identificador', 'celular', 'direccion', 'saldo', 'nota', 'ciudad', 'creado', 'modificado', 'modificado_por')
+    list_display = ('pk', 'nombre', 'identificador', 'celular', 'direccion',
+                    'saldo', 'nota', 'ciudad', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'nombre')
     # list_editable = ('celular', 'direccion', 'saldo', 'ciudad', 'nota',)
     search_fields = ('nombre', 'identificador', 'celular', 'direccion', 'nota')
     list_filter = ('nombre', 'saldo', 'ciudad', 'creado', 'modificado')
     fieldsets = (
         ('Cliente', {
-            'fields' : (
+            'fields': (
                 ('nombre', 'identificador', 'celular'),
                 ('direccion', 'ciudad'),
             ),
         }),
         ('Informacion Extra', {
-            'fields' : (
+            'fields': (
                 ('nota', 'saldo',),
             ),
         }),
         ('Metadata', {
-            'fields' : (('creado', 'modificado'),),
+            'fields': (('creado', 'modificado'),),
         }),
     )
 
@@ -37,27 +38,31 @@ class ClienteAdmin(admin.ModelAdmin):
         form.save_m2m()
         return instance
 
+
 class CompraAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'nombre', 'descripcion', 'cantidad', 'credito', 'precio_vendido', 'usuario', 'creado', 'nota', 'venta', 'modificado', 'modificado_por')
+    list_display = ('pk', 'nombre', 'descripcion', 'cantidad', 'credito', 'credito_cancelado',
+                    'precio_vendido', 'usuario', 'cancelado', 'creado', 'nota', 'venta', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'nombre')
     # list_editable = ('descripcion', 'cantidad', 'precio_vendido', 'nota',)
     search_fields = ('nombre', 'usuario', 'descripcion', 'venta', 'nota')
-    list_filter = ('nombre', 'credito', 'usuario', 'descripcion', 'creado', 'modificado')
+    list_filter = ('nombre', 'credito', 'usuario',
+                   'descripcion', 'creado', 'modificado')
     fieldsets = (
         ('Compra', {
-            'fields' : (
+            'fields': (
                 ('nombre', 'descripcion'),
                 ('cantidad', 'precio_vendido'),
             ),
         }),
         ('Informacion Extra', {
-            'fields' : (
-                ('usuario','perfil'),
-                ('venta', 'credito', 'nota')
+            'fields': (
+                ('usuario', 'perfil'),
+                ('venta', 'credito', 'nota'),
+                ('credito_cancelado', 'cancelado'),
             ),
         }),
         ('Metadata', {
-            'fields' : (('creado', 'modificado'),),
+            'fields': (('creado', 'modificado'),),
         }),
     )
 
@@ -70,6 +75,7 @@ class CompraAdmin(admin.ModelAdmin):
         form.save_m2m()
         return instance
 
+
 # Register your models here.
-admin.site.register(Cliente,ClienteAdmin)
-admin.site.register(Compra,CompraAdmin)
+admin.site.register(Cliente, ClienteAdmin)
+admin.site.register(Compra, CompraAdmin)

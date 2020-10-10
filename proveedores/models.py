@@ -38,6 +38,8 @@ class Adquisicion(models.Model):
     credito = models.BooleanField(blank=False, default=False)
     modificado_por = models.CharField(
         max_length=100, blank=False, default=None)
+    credito_cancelado = models.BooleanField(blank=False, default=False)
+    cancelado = models.BooleanField(blank=False, default=False)
 
     def __str__(self):
         return '{} {} compro {} de {} el {}'.format(

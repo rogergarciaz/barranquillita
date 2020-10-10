@@ -13,7 +13,7 @@
           |||
         </button>
         <a
-          href="{% url 'buscar' %}"
+          href="{% url 'explicacion' %}"
           style="border-right: 1px solid #efefef"
           class="navbar-brand pr-5"
         >
@@ -85,12 +85,32 @@
           </li>
           <li class="nav-icon">
             <a href="{% url 'acumuladoF' %}">
-              <strong>Acumulado</strong>
+              <strong>Acumulado V</strong>
+            </a>
+          </li>
+          <li class="nav-icon">
+            <a href="{% url 'acumuladoFP' %}">
+              <strong>Acumulado C</strong>
             </a>
           </li>
           <li class="nav-icon">
             <a href="{% url 'buscarP' %}">
-              <strong>Buscar</strong>
+              <strong>Buscar C</strong>
+            </a>
+          </li>
+          <li class="nav-icon">
+            <a href="{% url 'buscar' %}">
+              <strong>Buscar V</strong>
+            </a>
+          </li>
+          <li class="nav-icon">
+            <a href="{% url 'cancelarP' %}">
+              <strong>Cancela-Paga C</strong>
+            </a>
+          </li>
+          <li class="nav-icon">
+            <a href="{% url 'cancelarV' %}">
+              <strong>Cancela-Paga V</strong>
             </a>
           </li>
           <li class="nav-icon">

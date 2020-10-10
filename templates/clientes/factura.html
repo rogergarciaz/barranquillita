@@ -29,6 +29,7 @@
               <th scope="col">Precio Unitario</th>
               <th scope="col">Subotal</th>
               <th scope="col">Crédito</th>
+              <th scope="col">Crédito Cancelado</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +41,7 @@
               <td>{{ venta.precio_vendido }}</td>
               <td>{{ venta.total }}</td>
               <td>{{ venta.credito }}</td>
+              <td>{{ venta.credito_cancelado }}</td>
             </tr>
             {% endfor %}
             <tr>
