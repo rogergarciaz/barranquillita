@@ -1,72 +1,82 @@
 {% extends "base.html" %} {% block head_content %}
-<title>Cargar Prestamo</title>
+<title>Sacar Produccion</title>
 {% endblock %} {% block container %}
-<!-- Esto se mostrara si el usuario tiene permisos -->
-{% if request.user.is_staff is True %}
+
 <div class="container">
   <div class="row justify-content-md-center" style="justify-content: center">
     <div class="col-6 pt-3 pb-3" id="profile-box">
-      <h4 class="mb-4">Carga un Prestamo!</h4>
+      <h4 class="mb-4">Saca la Producción!</h4>
 
       <form method="POST" id="produc">
-        {% csrf_token %} {# Campo Descripcion #}
+        {% csrf_token %} 
+        
+        {# Campo Area #}
         <div class="form-group">
-          <input
-            class="form-control {% if form.descripcion.errors %}is-invalid{% endif %}"
-            type="text"
+          <label for="Area">Escoge el Area:</label>
+          <select
+            name="area"
+            id="Area"
+            class="form-control {% if form.area.errors %}is-invalid{% endif %}"
+          >
+            <option value="Lavado">Lavado</option>
+            <option value="Aglutinado">Aglutinado</option>
+            <option value="Peletizado">Peletizado</option>
+          </select>
+          <div class="invalid-feedback">
+            {% for error in form.area.errors %}{{ error }}{% endfor %}
+          </div>
+        </div>
+
+        {# Campo Descripcion #}
+        <div class="form-group">
+          <label for="Descripcion">Descripción:</label>
+          <select
             name="descripcion"
-            placeholder="Descripción"
-          />
+            id="Descripcion"
+            class="selectpicker"
+            data-live-search="true"
+          >
+            <option>----</option>
+            {% for descripcion in descripciones %}
+            <option value="{{descripcion.pk}}">{{descripcion.nombre}}</option>
+            {% endfor %}
+          </select>
+
           <div class="invalid-feedback">
             {% for error in form.descripcion.errors %}{{ error }}{% endfor %}
           </div>
         </div>
 
-        {# Campo Cuotas #}
+        {# Campo Cantidad #}
         <div class="form-group">
           <input
-            class="form-control {% if form.cuota.errors %}is-invalid{% endif %}"
+            class="form-control {% if form.cantidad.errors %}is-invalid{% endif %}"
             type="number"
-            name="cuotas"
-            placeholder="Cantidad de cuotas"
+            step="any"
+            name="cantidad"
+            placeholder="Cantidad"
           />
           <div class="invalid-feedback">
-            {% for error in form.cuotas.errors %}{{ error }}{% endfor %}
+            {% for error in form.cantidad.errors %}{{ error }}{% endfor %}
           </div>
         </div>
 
-        {# Campo Cuotas Debidas #}
+        {# Campo Precio #}
         <div class="form-group">
           <input
-            class="form-control {% if form.cuotas_debidas.errors %}is-invalid{% endif %}"
+            class="form-control {% if form.precio_pagado.errors %}is-invalid{% endif %}"
             type="number"
-            name="cuotas_debidas"
-            placeholder="Cuotas por pagar"
+            name="precio_pagado"
+            placeholder="precio por unidad"
           />
           <div class="invalid-feedback">
-            {% for error in form.cuotas_debidas.errors %}{{ error }}{% endfor %}
+            {% for error in form.precio_pagado.errors %}{{ error }}{% endfor %}
           </div>
         </div>
-
-        {# Campo Valor #}
-        <div class="form-group">
-          <input
-            class="form-control {% if form.valor.errors %}is-invalid{% endif %}"
-            type="number"
-            name="valor"
-            placeholder="Valor del prestamo"
-          />
-          <div class="invalid-feedback">
-            {% for error in form.valor.errors %}{{ error }}{% endfor %}
-          </div>
-        </div>
-
-        {# Campo Usuario #}
-        <input id="usuario" type="hidden" name="usuario" />
 
         {# Campo perfil #}
         <div class="form-group">
-          <label for="Empleados">Escoge el empleado:</label>
+          <label for="Empleados">Quien lo entregó:</label>
           <select
             name="perfil"
             onchange="changeUser()"
@@ -84,13 +94,16 @@
           </div>
         </div>
 
-        {# Campo nota #}
+        {# Campo Usuario #}
+        <input id="usuario" type="hidden" name="usuario" />
+
+        {# Campo Nota #}
         <div class="form-group">
           <input
             class="form-control {% if form.nota.errors %}is-invalid{% endif %}"
             type="text"
             name="nota"
-            placeholder="Notas"
+            placeholder="Nota"
           />
           <div class="invalid-feedback">
             {% for error in form.nota.errors %}{{ error }}{% endfor %}
@@ -112,10 +125,4 @@
     ).value;
   }
 </script>
-{% endif %}
-<!-- Esto se mostrara si el usuario no tiene permisos -->
-{% if request.user.is_staff is False %} {% include "permisos.html" %}
-<!-- Esto se mostrara si el usuario no tiene permisos -->
-{% endif%}
-<!-- Esto finalizara el bloque del template -->
 {% endblock %}

@@ -1,2 +1,15 @@
 media/
 barranquillita/settings.py
+barranquillita/__pycache__/
+clientes/__pycache__/
+clientes/migrations/
+prestamos/__pycache__/
+prestamos/migrations/
+proveedores/__pycache__/
+proveedores/migrations/
+salarios/__pycache__/
+salarios/migrations/
+sueldos/__pycache__/
+sueldos/migrations/
+usuarios/__pycache__/
+usuarios/migrations/

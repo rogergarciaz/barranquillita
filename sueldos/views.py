@@ -14,8 +14,8 @@ from django.views.generic import TemplateView, ListView
 from django.db.models import Q
 
 # Models
-from sueldos.models import Sueldo, Descripcion
-from salarios.models import Produccion, Fijo
+from sueldos.models import Sueldo, Descripcion, DescripcionInterna
+from salarios.models import Produccion, ProduccionInterna, Fijo
 from prestamos.models import Prestamo
 from usuarios.models import Perfil
 
@@ -32,6 +32,13 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
     )
     for produccion in producido:
         valorP = valorP + produccion.precio_pagado * produccion.cantidad
+    # Agregando produccion interna
+    producidoInterno = ProduccionInterna.objects.filter(
+        usuario=perfil.usuario,
+        creado__range=[fechaI, fechaF]
+    )
+    for produccionI in producidoInterno:
+        valorI = valorI + produccionI.precio_pagado * produccionI.cantidad
     # Agregando por dia
     fijos = Fijo.objects.filter(
         usuario=perfil.usuario,
@@ -49,8 +56,8 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
     if prestamos and ver:
         prestamos.update(cuotas_debidas=F('cuotas_debidas') - 1)
     # Valor total
-    valor = valorP + valorF - valorD - perfil.seguro - perfil.recordar
-    return valor, valorP, valorF, valorD
+    valor = valorP + valorF + valorI - valorD - perfil.seguro - perfil.recordar
+    return valor, valorP, valorF, valorD, valorI
 
 
 @login_required
@@ -63,7 +70,7 @@ def create_payment(request):
         sueldo = nomina_antigua.sueldo + 1
         perfiles = Perfil.objects.filter(usuario__is_active=True)
         for perfil in perfiles:
-            valor, valorP, valorF, valorD = sacar_sueldo(
+            valor, valorP, valorF, valorD, valorI = sacar_sueldo(
                 perfil, fechaI, fechaF, ver)
             nomina = Sueldo(
                 usuario=perfil.usuario,
@@ -90,11 +97,11 @@ def see_payment(request, nomina):
     total = 0
     for sueldo in sueldos:
         copia = model_to_dict(sueldo).copy()
-        valor, valorP, valorF, valorD = sacar_sueldo(
+        valor, valorP, valorF, valorD, valorI = sacar_sueldo(
             sueldo.perfil, fechaI, fechaF, ver)
         copia['empleado'] = str(sueldo.perfil.usuario.get_full_name())
         copia['valor'] = valor
-        copia['valorP'] = valorP
+        copia['valorP'] = valorP + valorI
         copia['valorF'] = valorF
         copia['valorD'] = valorD
         copia['numero'] = conteo
@@ -130,6 +137,31 @@ def search_descriptions(request):
         }
         )
     return render(request, "sueldos/buscar.html", {
+        'descripciones': descripciones,
+        'query': query,
+    }
+    )
+
+
+def search_internal_descriptions(request):
+    descripciones = DescripcionInterna.objects.filter(cantidad__lte=500)
+    query = "Escribe la descripción"
+    if request.method == 'POST':
+        query = request.POST['description']
+        if query.isnumeric():
+            descripciones = DescripcionInterna.objects.filter(
+                Q(cantidad=query)
+            )
+        else:
+            descripciones = DescripcionInterna.objects.filter(
+                Q(nombre__icontains=query)
+            )
+        return render(request, "sueldos/buscarInterna.html", {
+            'descripciones': descripciones,
+            'query': query,
+        }
+        )
+    return render(request, "sueldos/buscarInterna.html", {
         'descripciones': descripciones,
         'query': query,
     }

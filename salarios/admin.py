@@ -2,12 +2,11 @@
 from django.contrib import admin
 
 # Models
-from salarios.models import Produccion
-from salarios.models import Fijo
+from salarios.models import Produccion, Fijo, ProduccionInterna
 
 
 class ProduccionAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'usuario', 'descripcion', 'cantidad',
+    list_display = ('pk', 'usuario', 'descripcion', 'cantidad', 'agregado', 'perfil',
                     'precio_pagado', 'area', 'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
     # list_editable = ('descripcion', 'cantidad', 'nota', 'precio_pagado')
@@ -20,6 +19,45 @@ class ProduccionAdmin(admin.ModelAdmin):
             'fields': (
                 ('usuario', 'cantidad'),
                 ('descripcion', 'precio_pagado'),
+                ('perfil', 'agregado'),
+            ),
+        }),
+        ('Informacion Extra', {
+            'fields': (
+                ('nota',),
+                ('area',),
+            ),
+        }),
+        ('Metadata', {
+            'fields': (('creado', 'modificado'),),
+        }),
+    )
+
+    readonly_fields = ('creado', 'modificado',)
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        instance.modificado_por = request.user.username
+        instance.save()
+        form.save_m2m()
+        return instance
+
+
+class ProduccionInternaAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'usuario', 'descripcion', 'cantidad', 'perfil', 'agregado',
+                    'precio_pagado', 'area', 'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
+    list_display_links = ('pk', 'usuario')
+    # list_editable = ('descripcion', 'cantidad', 'nota', 'precio_pagado')
+    search_fields = ('usuario__username', 'usuario__first_name',
+                     'usuario__last_name', 'nota')
+    list_filter = ('descripcion', 'area', 'usuario',
+                   'precio_pagado', 'creado', 'modificado')
+    fieldsets = (
+        ('Produccion', {
+            'fields': (
+                ('usuario', 'cantidad'),
+                ('descripcion', 'precio_pagado'),
+                ('perfil', 'agregado'),
             ),
         }),
         ('Informacion Extra', {
@@ -44,7 +82,7 @@ class ProduccionAdmin(admin.ModelAdmin):
 
 
 class FijoAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'usuario', 'precio_pagado', 'area',
+    list_display = ('pk', 'usuario', 'precio_pagado', 'area', 'perfil', 'agregado',
                     'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
     # list_editable = ('nota', 'precio_pagado')
@@ -55,12 +93,12 @@ class FijoAdmin(admin.ModelAdmin):
         ('Fijo', {
             'fields': (
                 ('usuario', 'precio_pagado'),
-                ('area',),
+                ('area', 'perfil'),
             ),
         }),
         ('Informacion Extra', {
             'fields': (
-                ('nota',),
+                ('nota', 'agregado'),
             ),
         }),
         ('Metadata', {
@@ -80,4 +118,5 @@ class FijoAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Produccion, ProduccionAdmin)
+admin.site.register(ProduccionInterna, ProduccionInternaAdmin)
 admin.site.register(Fijo, FijoAdmin)

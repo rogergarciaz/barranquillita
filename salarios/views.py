@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 # Models
-from sueldos.models import Descripcion
+from sueldos.models import Descripcion, DescripcionInterna
 from usuarios.models import Perfil
 # Forms
-from salarios.forms import ProductionForm, FijoForm
+from salarios.forms import ProductionForm, ProductionInternaForm, FijoForm
 
 
 # Create your views here.
@@ -15,8 +15,8 @@ from salarios.forms import ProductionForm, FijoForm
 def create_product(request):
     usuarios = Perfil.objects.all()
     #usuarios = User.objects.all()
-    exclude_list = ['Sellado', 'Extrusion']
-    descripciones = Descripcion.objects.filter(area__in=exclude_list)
+    include_list = ['Sellado', 'Extrusion']
+    descripciones = Descripcion.objects.filter(area__in=include_list)
     if request.method == 'POST':
         form = ProductionForm(request.POST)
         if form.is_valid():
@@ -41,24 +41,49 @@ def create_production(request):
     usuarios = Perfil.objects.all()
     #usuarios = User.objects.all()
     exclude_list = ['Sellado', 'Extrusion']
-    descripciones = Descripcion.objects.exclude(area__in=exclude_list)
+    descripciones = DescripcionInterna.objects.exclude(area__in=exclude_list)
     if request.method == 'POST':
-        form = ProductionForm(request.POST)
+        form = ProductionInternaForm(request.POST)
         if form.is_valid():
             produccion = form.save(commit=False)
             produccion.agregado = request.user.username
             produccion.modificado_por = request.user.username
             produccion.save()
             numero = form.cleaned_data.get('descripcion', None).pk
-            descripcion = Descripcion.objects.get(pk=numero)
+            descripcion = DescripcionInterna.objects.get(pk=numero)
             cantidadA = descripcion.cantidad
             descripcion.cantidad = cantidadA + \
                 form.cleaned_data.get('cantidad', None)
             descripcion.save()
             return redirect('produccion')
     else:
-        form = ProductionForm()
+        form = ProductionInternaForm()
     return render(request, 'salarios/produccion.html', {'usuarios': usuarios, 'descripciones': descripciones})
+
+
+@login_required
+def take_production(request):
+    usuarios = Perfil.objects.all()
+    #usuarios = User.objects.all()
+    exclude_list = ['Sellado', 'Extrusion']
+    descripciones = DescripcionInterna.objects.exclude(area__in=exclude_list)
+    if request.method == 'POST':
+        form = ProductionInternaForm(request.POST)
+        if form.is_valid():
+            produccion = form.save(commit=False)
+            produccion.agregado = request.user.username
+            produccion.modificado_por = request.user.username
+            produccion.save()
+            numero = form.cleaned_data.get('descripcion', None).pk
+            descripcion = DescripcionInterna.objects.get(pk=numero)
+            cantidadA = descripcion.cantidad
+            descripcion.cantidad = cantidadA - \
+                form.cleaned_data.get('cantidad', None)
+            descripcion.save()
+            return redirect('sacado')
+    else:
+        form = ProductionInternaForm()
+    return render(request, 'salarios/sacado.html', {'usuarios': usuarios, 'descripciones': descripciones})
 
 
 @login_required

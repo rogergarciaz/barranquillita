@@ -7,7 +7,7 @@ from django.forms.models import model_to_dict
 
 # Models
 from proveedores.models import Adquisicion, Proveedor
-from sueldos.models import Descripcion
+from sueldos.models import DescripcionInterna
 
 # Forms
 from proveedores.forms import AdquisicionForm
@@ -30,7 +30,7 @@ def create_adquisition_model_form(request):
                 factura.compra = compra
                 factura.modificado_por = request.user.username
                 descripcionid = form.cleaned_data.get('descripcion', None).pk
-                descripcion = Descripcion.objects.get(pk=descripcionid)
+                descripcion = DescripcionInterna.objects.get(pk=descripcionid)
                 cantidadA = descripcion.cantidad
                 cantidad = form.cleaned_data.get('cantidad', None)
                 suma = cantidadA + cantidad
@@ -63,7 +63,7 @@ def create_bill(request, factura):
     total = 0
     for compra in compras:
         copia = model_to_dict(compra).copy()
-        descrip = Descripcion.objects.get(pk=compra.descripcion.pk)
+        descrip = DescripcionInterna.objects.get(pk=compra.descripcion.pk)
         copia['descripcion'] = descrip.nombre
         pesos = compra.precio_compra * compra.cantidad
         if compra.credito == True:

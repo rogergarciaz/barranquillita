@@ -13,7 +13,8 @@ class Sueldo(models.Model):
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
     agregado = models.CharField(max_length=100, blank=False, default=None)
-    modificado_por = models.CharField(max_length=100, blank=False, default=None)
+    modificado_por = models.CharField(
+        max_length=100, blank=False, default=None)
 
     def __str__(self):
         return 'El sueldo el {} de {} {} es de {} pesos'.format(
@@ -24,23 +25,41 @@ class Sueldo(models.Model):
         )
 
 
+# Clientes Ventas, Sellado, Exrusión
 class Descripcion(models.Model):
     nombre = models.CharField(max_length=100, blank=False)
-    precio_vendido = models.PositiveIntegerField(blank=True, default=None)
-    precio_pagado = models.PositiveIntegerField(blank=True, default=None)
-    precio_compra = models.PositiveIntegerField(blank=True, default=None)
+    precio_vendido = models.FloatField(blank=True, default=None)
+    precio_pagado = models.FloatField(blank=True, default=None)
+    precio_compra = models.FloatField(blank=True, default=None)
     cantidad = models.FloatField(blank=False, default=None)
     creado = models.DateTimeField(auto_now_add=True)
     modificado = models.DateTimeField(auto_now=True)
     area = models.CharField(max_length=100, blank=False, default='Sellado')
-    modificado_por = models.CharField(max_length=100, blank=False, default=None)
+    modificado_por = models.CharField(
+        max_length=100, blank=False, default=None)
 
     def __str__(self):
-        if self.cantidad > 0.0 and (self.area == 'Extrusion' or self.area == 'Sellado'):
+        if self.cantidad > 0.0:
             return '{}'.format(self.nombre)
-        elif self.cantidad <= 0.0 and (self.area == 'Extrusion' or self.area == 'Sellado'):
+        elif self.cantidad <= 0.0:
             return 'No hay {}'.format(self.nombre)
-        elif self.cantidad > 0.0 and (self.area != 'Extrusion' and self.area != 'Sellado'):
-            return 'ZZZ {}'.format(self.nombre)
-        else:
-            return 'ZZZ No hay {}'.format(self.nombre)
+
+
+# Proveedores Compras, Lavado, Aglutinado, Peletizado
+class DescripcionInterna(models.Model):
+    nombre = models.CharField(max_length=100, blank=False)
+    precio_vendido = models.FloatField(blank=True, default=None)
+    precio_pagado = models.FloatField(blank=True, default=None)
+    precio_compra = models.FloatField(blank=True, default=None)
+    cantidad = models.FloatField(blank=False, default=None)
+    creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
+    area = models.CharField(max_length=100, blank=False, default='Peletizado')
+    modificado_por = models.CharField(
+        max_length=100, blank=False, default=None)
+
+    def __str__(self):
+        if self.cantidad > 0.0:
+            return '{}'.format(self.nombre)
+        elif self.cantidad <= 0.0:
+            return 'No hay {}'.format(self.nombre)

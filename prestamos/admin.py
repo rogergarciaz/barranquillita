@@ -19,7 +19,7 @@ class PrestamoAdmin(admin.ModelAdmin):
             'fields': (
                 ('usuario', 'perfil',),
                 ('descripcion',),
-                ('valor',),
+                ('valor', 'agregado'),
             ),
         }),
         ('Informacion Extra', {
