@@ -22,6 +22,25 @@
           Generar
         </button>
       </form>
+      <hr/>
+      <form action="{% url 'nominasF' %}" method="POST">
+        <h4>Busca la nomina por fechas</h4>
+        {% csrf_token %}
+        <div class="row">
+          <div class="col text-center">
+            <label>Fecha Inicial</label>
+            <input id="datetimepicker1" name="fechaI" type="text" />
+            <label>Fecha Final</label>
+            <input id="datetimepicker2" name="fechaF" type="text" />
+          </div>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col text-center">
+            <button type="submit" class="btn btn-primary">Generar</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -30,5 +49,15 @@
 {% if request.user.is_staff is False %} {% include "permisos.html" %}
 <!-- Esto se mostrara si el usuario no tiene permisos -->
 {% endif%}
+<script>
+  $(function () {
+    $('#datetimepicker1').datetimepicker();
+  });
+</script>
+<script>
+  $(function () {
+    $('#datetimepicker2').datetimepicker();
+  });
+</script>
 <!-- Esto finalizara el bloque del template -->
 {% endblock %}

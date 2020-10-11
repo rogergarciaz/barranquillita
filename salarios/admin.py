@@ -44,14 +44,14 @@ class ProduccionAdmin(admin.ModelAdmin):
 
 
 class ProduccionInternaAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'usuario', 'descripcion', 'cantidad', 'perfil', 'agregado',
+    list_display = ('pk', 'usuario', 'descripcion', 'cantidad', 'perfil', 'agregado', 'ingresado',
                     'precio_pagado', 'area', 'nota', 'agregado', 'creado', 'modificado', 'modificado_por')
     list_display_links = ('pk', 'usuario')
     # list_editable = ('descripcion', 'cantidad', 'nota', 'precio_pagado')
     search_fields = ('usuario__username', 'usuario__first_name',
                      'usuario__last_name', 'nota')
     list_filter = ('descripcion', 'area', 'usuario',
-                   'precio_pagado', 'creado', 'modificado')
+                   'precio_pagado', 'creado', 'modificado', 'ingresado')
     fieldsets = (
         ('Produccion', {
             'fields': (
@@ -63,7 +63,7 @@ class ProduccionInternaAdmin(admin.ModelAdmin):
         ('Informacion Extra', {
             'fields': (
                 ('nota',),
-                ('area',),
+                ('area', 'ingresado'),
             ),
         }),
         ('Metadata', {

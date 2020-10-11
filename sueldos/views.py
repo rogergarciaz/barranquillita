@@ -25,6 +25,8 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
     valorP = 0
     valorF = 0
     valorD = 0
+    valorI = 0
+    existeD = 0
     # Agregando produccion
     producido = Produccion.objects.filter(
         usuario=perfil.usuario,
@@ -35,6 +37,7 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
     # Agregando produccion interna
     producidoInterno = ProduccionInterna.objects.filter(
         usuario=perfil.usuario,
+        ingresado=True,
         creado__range=[fechaI, fechaF]
     )
     for produccionI in producidoInterno:
@@ -53,7 +56,8 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
     )
     for prestamo in prestamos:
         valorD = valorD + prestamo.valor/prestamo.cuotas
-    if prestamos and ver:
+        existeD = existeD + 1
+    if existeD > 0 and ver:
         prestamos.update(cuotas_debidas=F('cuotas_debidas') - 1)
     # Valor total
     valor = valorP + valorF + valorI - valorD - perfil.seguro - perfil.recordar
@@ -62,9 +66,9 @@ def sacar_sueldo(perfil, fechaI, fechaF, ver):
 
 @login_required
 def create_payment(request):
-    nomina_antigua = Sueldo.objects.last()
-    fechaI = nomina_antigua.creado
     if request.method == 'POST':
+        nomina_antigua = Sueldo.objects.last()
+        fechaI = nomina_antigua.creado
         ver = True  # reduce payments debts
         fechaF = datetime.datetime.now()  # not include day of click
         sueldo = nomina_antigua.sueldo + 1
@@ -78,7 +82,8 @@ def create_payment(request):
                 nota=request.POST['nota'],
                 sueldo=sueldo,
                 valor=valor,
-                agregado=request.user.username
+                agregado=request.user.username,
+                modificado_por=request.user.username
             )
             nomina.save()
         return redirect('nominas', nomina=sueldo)
@@ -99,8 +104,9 @@ def see_payment(request, nomina):
         copia = model_to_dict(sueldo).copy()
         valor, valorP, valorF, valorD, valorI = sacar_sueldo(
             sueldo.perfil, fechaI, fechaF, ver)
+        valorD = valor - sueldo.valor
         copia['empleado'] = str(sueldo.perfil.usuario.get_full_name())
-        copia['valor'] = valor
+        copia['valor'] = valor - valorD
         copia['valorP'] = valorP + valorI
         copia['valorF'] = valorF
         copia['valorD'] = valorD
@@ -116,6 +122,43 @@ def see_payment(request, nomina):
         'fechaFi': fechaF.strftime('%Y-%m-%d %H:%M'),
     }
     )
+
+
+@login_required
+def see_paymentDates(request):
+    if request.method == 'POST':
+        nomina = 'Especial'
+        initialDate = request.POST['fechaI']  # str '2020/10/08 17:02'
+        fechaI = datetime.datetime.strptime(initialDate, "%Y/%m/%d %H:%M")
+        finalDate = request.POST['fechaF']
+        fechaF = datetime.datetime.strptime(finalDate, "%Y/%m/%d %H:%M")
+        ver = False  # not reduce payment debts
+        sueldos = Sueldo.objects.filter(creado__range=[fechaI, fechaF])
+        subtotal = []
+        conteo = 1
+        total = 0
+        for sueldo in sueldos:
+            copia = model_to_dict(sueldo).copy()
+            valor, valorP, valorF, valorD, valorI = sacar_sueldo(
+                sueldo.perfil, fechaI, fechaF, ver)
+            copia['empleado'] = str(sueldo.perfil.usuario.get_full_name())
+            copia['valor'] = valor
+            copia['valorP'] = valorP + valorI
+            copia['valorF'] = valorF
+            copia['valorD'] = valorD
+            copia['numero'] = conteo
+            subtotal.append(copia)
+            conteo += 1
+            total = total + valor
+        return render(request, "sueldos/sueldo.html", {
+            'sueldos': subtotal,
+            'nomina': nomina,
+            'total': total,
+            'fechaIn': fechaI.strftime('%Y-%m-%d %H:%M'),
+            'fechaFi': fechaF.strftime('%Y-%m-%d %H:%M'),
+        }
+        )
+    return render(request, 'sueldos/nomina.html')
 
 
 def search_descriptions(request):

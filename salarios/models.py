@@ -46,6 +46,7 @@ class ProduccionInterna(models.Model):
     agregado = models.CharField(max_length=100, blank=False, default=None)
     modificado_por = models.CharField(
         max_length=100, blank=False, default=None)
+    ingresado = models.BooleanField(blank=False, default=True)
 
     def __str__(self):
         return '{} {} produjo {} de {} el {}'.format(

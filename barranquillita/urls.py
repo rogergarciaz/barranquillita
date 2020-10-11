@@ -29,6 +29,8 @@ urlpatterns = [
     path('sueldos/', sueldos_views.create_payment, name='nomina'),
     path('sueldos/nomina/<int:nomina>/',
          sueldos_views.see_payment, name='nominas'),
+    path('sueldos/nomina/fechas/',
+         sueldos_views.see_paymentDates, name='nominasF'),
     path('sueldos/productos/', sueldos_views.search_descriptions, name='buscar'),
     path('sueldos/produccion/',
          sueldos_views.search_internal_descriptions, name='buscarP'),

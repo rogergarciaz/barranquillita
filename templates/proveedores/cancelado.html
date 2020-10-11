@@ -4,43 +4,49 @@
 <!-- Esto se mostrara si el usuario tiene permisos -->
 {% if request.user.is_staff is True %}
 <div class="container">
+  <div class="row justify-content-md-center" style="justify-content: center" id="profile-box">
   <form action="{% url 'cancelarP' %}" method="POST">
     {% csrf_token %}
     <h2>Cancela una factura completa:</h2>
     <div class="row">
       <div class="col text-center">
-        <label>Escribe el número de la factura</label>
-        <input type="number" name='compra' />
-        <button type="submit" class="btn btn-primary">Cancelar</button>
+        <input class="form-control" placeholder="Escribe el número de la factura" type="number" name='compra' />
+        <br />
+        <button type="submit" class="btn btn-primary mb-4">Cancelar</button>
       </div>
     </div>
   </form>
+</div>
   <br />
   <hr style="border-top: 3px double #8c8b8b;"/>
+  <div class="row justify-content-md-center" style="justify-content: center" id="profile-box">
   <form action="{% url 'pagarP' %}" method="POST">
     {% csrf_token %}
     <h2>Paga una factura completa:</h2>
     <div class="row">
       <div class="col text-center">
-          <label>Escribe el número de la factura</label>
-          <input type="number" name='compra' />
-        <button type="submit" class="btn btn-primary">Pagar</button>
+          <input class="form-control" placeholder="Escribe el número de la factura" type="number" name='compra' />
+          <br />
+        <button type="submit" class="btn btn-primary mb-4">Pagar</button>
       </div>
     </div>
   </form>
+</div>
   <br />
   <hr style="border-top: 3px double #8c8b8b;"/>
+  <div class="row justify-content-md-center" style="justify-content: center" id="profile-box">
   <form action="{% url 'pagarP' %}" method="POST">
     {% csrf_token %}
     <h2>Paga un producto:</h2>
     <div class="row">
       <div class="col text-center">
-          <label>Escribe el id del producto</label>
-          <input type="number" name='compra' />
-        <button type="submit" class="btn btn-primary">Pagar</button>
+          <input class="form-control" placeholder="Escribe el id del producto" type="number" name='compra' />
+          <br />
+        <button type="submit" class="btn btn-primary mb-4">Pagar</button>
       </div>
     </div>
   </form>
+</div>
   <br />
   {% if tabla %}
   <div class="container">

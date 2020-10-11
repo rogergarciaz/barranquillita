@@ -19,7 +19,7 @@ from proveedores.forms import AdquisicionForm
 # Create your views here.
 @login_required
 def create_adquisition_model_form(request):
-    AdquisicionFormSet = formset_factory(AdquisicionForm, extra=1)
+    AdquisicionFormSet = formset_factory(AdquisicionForm, extra=100)
     proveedores = Proveedor.objects.all()
     if request.method == 'POST':
         compra = Adquisicion.objects.last().compra + 1
@@ -117,14 +117,14 @@ def see_consolidate(request):
         copia['usuario'] = usua
         prove = Proveedor.objects.get(pk=compra.nombre.pk)
         copia['nombre'] = prove
-        valor = compra.cantidad * compra.precio_vendido
+        valor = compra.cantidad * compra.precio_compra
         if compra.credito == True and compra.credito_cancelado == True:
-            credito = credito + valor
+            cancelado = cancelado + valor
             total = total + valor
             copia['credito'] = 'Si'
             copia['credito_cancelado'] = 'Si'
         elif compra.credito == True and compra.credito_cancelado == False:
-            cancelado = cancelado + valor
+            credito = credito + valor
             total = total + valor
             copia['credito'] = 'Si'
             copia['credito_cancelado'] = 'No'
@@ -176,12 +176,12 @@ def see_consolidateDates(request):
             copia['nombre'] = prove
             valor = compra.cantidad * compra.precio_compra
             if compra.credito == True and compra.credito_cancelado == True:
-                credito = credito + valor
+                cancelado = cancelado + valor
                 total = total + valor
                 copia['credito'] = 'Si'
                 copia['credito_cancelado'] = 'Si'
             elif compra.credito == True and compra.credito_cancelado == False:
-                cancelado = cancelado + valor
+                credito = credito + valor
                 total = total + valor
                 copia['credito'] = 'Si'
                 copia['credito_cancelado'] = 'No'
@@ -218,25 +218,26 @@ def cancel_bill(request):
         numeroF = int(request.POST['compra'])
         compras = Adquisicion.objects.filter(compra=numeroF)
         for compra in compras:
-            compra.cancelado = True
-            numero = compra.descripcion.pk
-            descripcion = DescripcionInterna.objects.get(pk=numero)
-            cantidadA = descripcion.cantidad
-            cantidad = compra.cantidad
-            resta = cantidadA - cantidad
-            proveedorid = compra.nombre.pk
-            precio = compra.precio_vendido
-            proveedor = Proveedor.objects.get(pk=proveedorid)
-            saldoA = proveedor.saldo
-            saldo = saldoA - precio*cantidad
-            descripcion.cantidad = resta
-            if compra.credito == True:
-                proveedor.saldo = saldo
-                proveedor.save()
-            descripcion.save()
-            compra.save()
-        mensaje = 'Se canceló la factura' + str(numeroF)
-        tabla = True
+            if compra.cancelado == False:
+                compra.cancelado = True
+                numero = compra.descripcion.pk
+                descripcion = DescripcionInterna.objects.get(pk=numero)
+                cantidadA = descripcion.cantidad
+                cantidad = compra.cantidad
+                resta = cantidadA - cantidad
+                proveedorid = compra.nombre.pk
+                precio = compra.precio_vendido
+                proveedor = Proveedor.objects.get(pk=proveedorid)
+                saldoA = proveedor.saldo
+                saldo = saldoA - precio*cantidad
+                descripcion.cantidad = resta
+                if compra.credito == True:
+                    proveedor.saldo = saldo
+                    proveedor.save()
+                descripcion.save()
+                compra.save()
+                mensaje = 'Se canceló la factura ' + str(numeroF)
+                tabla = True
         return render(request, "proveedores/cancelado.html", {
             'mensaje': mensaje,
             'tabla': tabla,
@@ -257,19 +258,19 @@ def pay_bill(request):
         numeroF = int(request.POST['compra'])
         compras = Adquisicion.objects.filter(compra=numeroF)
         for compra in compras:
-            if compra.credito_cancelado == False and compra.credito == True:
+            if compra.credito_cancelado == False and compra.credito == True and compra.cancelado == False:
                 compra.credito_cancelado = True
                 cantidad = compra.cantidad
                 proveedorid = compra.nombre.pk
-                precio = compra.precio_vendido
+                precio = compra.precio_compra
                 proveedor = Proveedor.objects.get(pk=proveedorid)
                 saldoA = proveedor.saldo
                 saldo = saldoA - precio*cantidad
                 proveedor.saldo = saldo
                 proveedor.save()
                 compra.save()
-        mensaje = 'Se pagó la factura' + str(numeroF)
-        tabla = True
+                mensaje = 'Se pagó la factura ' + str(numeroF)
+                tabla = True
         return render(request, "proveedores/cancelado.html", {
             'mensaje': mensaje,
             'tabla': tabla,
@@ -289,19 +290,19 @@ def pay_product(request):
     if request.method == 'POST':
         numeroF = int(request.POST['compra'])
         compra = Adquisicion.objects.get(pk=numeroF)
-        if compra.credito_cancelado == False and compra.credito == True:
+        if compra.credito_cancelado == False and compra.credito == True and compra.cancelado == False:
             compra.credito_cancelado = True
             cantidad = compra.cantidad
             proveedorid = compra.nombre.pk
-            precio = compra.precio_vendido
+            precio = compra.precio_compra
             proveedor = Proveedor.objects.get(pk=proveedorid)
             saldoA = proveedor.saldo
             saldo = saldoA - precio*cantidad
             proveedor.saldo = saldo
             proveedor.save()
             compra.save()
-        mensaje = 'Se pagó el producto' + str(numeroF)
-        tabla = True
+            mensaje = 'Se pagó el producto' + str(numeroF)
+            tabla = True
         return render(request, "proveedores/cancelado.html", {
             'mensaje': mensaje,
             'tabla': tabla,

@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
+    <!-- Esto se mostrara si el usuario tiene permisos -->
+    {% if request.user.is_authenticated is True %}
     <br /><br />
     <div class="container">
       <h1><strong>Pupiplast del Caribe</strong></h1>
@@ -52,5 +54,10 @@
         </table>
       </div>
     </div>
+    {% endif %}
+    <!-- Esto se mostrara si el usuario no tiene permisos -->
+    {% if request.user.is_authenticated is False %} {% include "permisos.html" %}
+    <!-- Esto se mostrara si el usuario no tiene permisos -->
+    {% endif%}
   </body>
 </html>

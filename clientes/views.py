@@ -22,7 +22,7 @@ from clientes.forms import CompraForm
 @login_required
 def create_sale_model_form(request):
     clientes = Cliente.objects.all()
-    CompraFormSet = formset_factory(CompraForm, extra=1)
+    CompraFormSet = formset_factory(CompraForm, extra=10)
     if request.method == 'POST':
         venta = Compra.objects.last().venta + 1
         formset = CompraFormSet(request.POST)
@@ -139,12 +139,12 @@ def see_consolidate(request):
         copia['nombre'] = clien
         valor = venta.cantidad * venta.precio_vendido
         if venta.credito == True and venta.credito_cancelado == True:
-            credito = credito + valor
+            cancelado = cancelado + valor
             total = total + valor
             copia['credito'] = 'Si'
             copia['credito_cancelado'] = 'Si'
         elif venta.credito == True and venta.credito_cancelado == False:
-            cancelado = cancelado + valor
+            credito = credito + valor
             total = total + valor
             copia['credito'] = 'Si'
             copia['credito_cancelado'] = 'No'
@@ -196,12 +196,12 @@ def see_consolidateDates(request):
             copia['nombre'] = clien
             valor = venta.cantidad * venta.precio_vendido
             if venta.credito == True and venta.credito_cancelado == True:
-                credito = credito + valor
+                cancelado = cancelado + valor
                 total = total + valor
                 copia['credito'] = 'Si'
                 copia['credito_cancelado'] = 'Si'
             elif venta.credito == True and venta.credito_cancelado == False:
-                cancelado = cancelado + valor
+                credito = credito + valor
                 total = total + valor
                 copia['credito'] = 'Si'
                 copia['credito_cancelado'] = 'No'
@@ -238,25 +238,26 @@ def cancel_bill(request):
         numeroF = int(request.POST['venta'])
         ventas = Compra.objects.filter(venta=numeroF)
         for venta in ventas:
-            venta.cancelado = True
-            numero = venta.descripcion.pk
-            descripcion = Descripcion.objects.get(pk=numero)
-            cantidadA = descripcion.cantidad
-            cantidad = venta.cantidad
-            resta = cantidadA + cantidad
-            clienteid = venta.nombre.pk
-            precio = venta.precio_vendido
-            cliente = Cliente.objects.get(pk=clienteid)
-            saldoA = cliente.saldo
-            saldo = saldoA + precio*cantidad
-            descripcion.cantidad = resta
-            if venta.credito == True:
-                cliente.saldo = saldo
-                cliente.save()
-            descripcion.save()
-            venta.save()
-        mensaje = 'Se cancelo la factura' + str(numeroF)
-        tabla = True
+            if venta.cancelado == False:
+                venta.cancelado = True
+                numero = venta.descripcion.pk
+                descripcion = Descripcion.objects.get(pk=numero)
+                cantidadA = descripcion.cantidad
+                cantidad = venta.cantidad
+                resta = cantidadA + cantidad
+                clienteid = venta.nombre.pk
+                precio = venta.precio_vendido
+                cliente = Cliente.objects.get(pk=clienteid)
+                saldoA = cliente.saldo
+                saldo = saldoA + precio*cantidad
+                descripcion.cantidad = resta
+                if venta.credito == True:
+                    cliente.saldo = saldo
+                    cliente.save()
+                descripcion.save()
+                venta.save()
+                mensaje = 'Se cancelo la factura ' + str(numeroF)
+                tabla = True
         return render(request, "clientes/cancelado.html", {
             'mensaje': mensaje,
             'tabla': tabla,
@@ -274,10 +275,10 @@ def pay_bill(request):
     tabla = False
     mensaje = ' '
     if request.method == 'POST':
-        numeroF = int(request.POST['compra'])
+        numeroF = int(request.POST['venta'])
         ventas = Compra.objects.filter(venta=numeroF)
         for venta in ventas:
-            if venta.credito_cancelado == False and venta.credito == True:
+            if venta.credito_cancelado == False and venta.credito == True and venta.cancelado == False:
                 venta.credito_cancelado = True
                 cantidad = venta.cantidad
                 clienteid = venta.nombre.pk
@@ -288,8 +289,8 @@ def pay_bill(request):
                 cliente.saldo = saldo
                 cliente.save()
                 venta.save()
-        mensaje = 'Se pagó la factura' + str(numeroF)
-        tabla = True
+                mensaje = 'Se pagó la factura' + str(numeroF)
+                tabla = True
         return render(request, "clientes/cancelado.html", {
             'mensaje': mensaje,
             'tabla': tabla,
@@ -307,9 +308,9 @@ def pay_product(request):
     tabla = False
     mensaje = ' '
     if request.method == 'POST':
-        numeroF = int(request.POST['compra'])
+        numeroF = int(request.POST['venta'])
         venta = Compra.objects.get(pk=numeroF)
-        if venta.credito_cancelado == False and venta.credito == True:
+        if venta.credito_cancelado == False and venta.credito == True and venta.cancelado == False:
             venta.credito_cancelado = True
             cantidad = venta.cantidad
             clienteid = venta.nombre.pk
@@ -320,8 +321,8 @@ def pay_product(request):
             cliente.saldo = saldo
             cliente.save()
             venta.save()
-        mensaje = 'Se pagó el producto' + str(numeroF)
-        tabla = True
+            mensaje = 'Se pagó el producto ' + str(numeroF)
+            tabla = True
         return render(request, "clientes/cancelado.html", {
             'mensaje': mensaje,
             'tabla': tabla,

@@ -23,6 +23,7 @@ def create_product(request):
             produccion = form.save(commit=False)
             produccion.agregado = request.user.username
             produccion.modificado_por = request.user.username
+            produccion.ingresado = True
             produccion.save()
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = Descripcion.objects.get(pk=numero)
@@ -48,6 +49,7 @@ def create_production(request):
             produccion = form.save(commit=False)
             produccion.agregado = request.user.username
             produccion.modificado_por = request.user.username
+            produccion.ingresado = True
             produccion.save()
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = DescripcionInterna.objects.get(pk=numero)
@@ -73,6 +75,7 @@ def take_production(request):
             produccion = form.save(commit=False)
             produccion.agregado = request.user.username
             produccion.modificado_por = request.user.username
+            produccion.ingresado = False
             produccion.save()
             numero = form.cleaned_data.get('descripcion', None).pk
             descripcion = DescripcionInterna.objects.get(pk=numero)
