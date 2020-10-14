@@ -19,7 +19,7 @@ from proveedores.forms import AdquisicionForm
 # Create your views here.
 @login_required
 def create_adquisition_model_form(request):
-    AdquisicionFormSet = formset_factory(AdquisicionForm, extra=100)
+    AdquisicionFormSet = formset_factory(AdquisicionForm, extra=10)
     proveedores = Proveedor.objects.all()
     if request.method == 'POST':
         compra = Adquisicion.objects.last().compra + 1

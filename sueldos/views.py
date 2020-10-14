@@ -168,7 +168,7 @@ def search_descriptions(request):
         query = request.POST['description']
         if query.isnumeric():
             descripciones = Descripcion.objects.filter(
-                Q(cantidad=query)
+                Q(cantidad__lte=query)
             )
         else:
             descripciones = Descripcion.objects.filter(
@@ -193,7 +193,7 @@ def search_internal_descriptions(request):
         query = request.POST['description']
         if query.isnumeric():
             descripciones = DescripcionInterna.objects.filter(
-                Q(cantidad=query)
+                Q(cantidad__lte=query)
             )
         else:
             descripciones = DescripcionInterna.objects.filter(

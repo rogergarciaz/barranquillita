@@ -86,14 +86,6 @@
           class="btn btn-default"
           style="width: 20%"
         />
-        <input
-          onclick="rem()"
-          type="button"
-          value="-"
-          id="rem_one"
-          class="btn btn-danger"
-          style="width: 20%"
-        />
 
         <div id="empty_form" style="display: none">
           
@@ -162,20 +154,6 @@
         .replace(/__prefix__/g, form_idx)
     );
     $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-  }
-  function rem() {
-    var form_idx = $('#id_form-TOTAL_FORMS').val();
-    var quantity = document.getElementsByName(`form-${parseInt(form_idx) - 1}-cantidad`);
-    var price = document.getElementsByName(`form-${parseInt(form_idx) - 1}-precio_compra`);
-    var description = document.getElementsByName(`form-${parseInt(form_idx) - 1}-descripcion`);
-    var note = document.getElementsByName(`form-${parseInt(form_idx) - 1}-nota`);
-    // form-1-cantidad
-    console.log(element);
-    element.parentNode.removeChild(quantity);
-    element.parentNode.removeChild(price);
-    element.parentNode.removeChild(description);
-    element.parentNode.removeChild(note);
-    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) - 1);
   }
 </script>
 
