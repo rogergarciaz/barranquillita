@@ -11,6 +11,7 @@
           class="form-control"
           type="text"
           placeholder="{{ query }}"
+          id="myInput"
         />
         <br />
         <button type="submit" class="btn btn-primary">Buscar</button>
@@ -30,7 +31,7 @@
           <th scope="col">Precio Pagado</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="myTable">
         {% for descripcion in descripciones %}
         <tr>
           <th scope="row">{{ descripcion.nombre }}</th>
@@ -49,4 +50,15 @@
   </div>
   {% endif %}
 </div>
+
+<script>
+  $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
 {% endblock %}

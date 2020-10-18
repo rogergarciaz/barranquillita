@@ -8,12 +8,17 @@
 <div class="container">
   <div class="row justify-content-md-center" style="justify-content: center">
     <div class="col-8 pt-2 pb-2" id="profile-box">
-      <h4 class="mb-4">Carga la Venta!</h4>
 
       <form method="POST" id="vent">
         {% csrf_token %}
 
         {{ formset.management_form }}
+
+        <button type="submit" class="btn btn-primary btn-block mt-5">
+          Cargar!
+        </button>
+
+        <h4 class="mb-5 mt-5">Digita la Venta!</h4>
 
         <div class="form-group">
           <label for="Cliente">Escoge el Cliente:</label>
@@ -135,9 +140,6 @@
 
           <hr style="border-top: 3px double #8c8b8b;"/>
         </div>
-        <button type="submit" class="btn btn-primary btn-block mt-5">
-          Cargar!
-        </button>
       </form>
     </div>
   </div>

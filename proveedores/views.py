@@ -26,6 +26,11 @@ def create_adquisition_model_form(request):
         formset = AdquisicionFormSet(request.POST)
         # if formset.is_valid():
         for form in formset:
+            # if form.cleaned_data.get('precio_compra', None).isnumeric() is not True:
+            # descripcionid = form.cleaned_data.get('descripcion', None).pk
+            # descripcion = DescripcionInterna.objects.get(pk=descripcionid)
+            # form.precio_compra = descripcion.precio_compra
+            # else:
             if form.is_valid():
                 factura = form.save(commit=False)
                 factura.usuario = request.user

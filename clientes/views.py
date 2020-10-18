@@ -28,6 +28,11 @@ def create_sale_model_form(request):
         formset = CompraFormSet(request.POST)
         # if formset.is_valid():
         for form in formset:
+            # if form.cleaned_data.get('precio_vendido', None).isnumeric() is not True:
+            # numero = form.cleaned_data.get('descripcion', None).pk
+            # descripcion = Descripcion.objects.get(pk=numero)
+            # form.precio_vendido = descripcion.precio_vendido
+            # else:
             if form.is_valid():
                 factura = form.save(commit=False)
                 factura.usuario = request.user
