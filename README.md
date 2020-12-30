@@ -5,14 +5,11 @@ _An app for a plastic manufacturing company. A web application for make a CRUD f
 
 ## Description
 
-The app allows all the operation from the company, and leaves a register of every operation made. This app also have permissions levels according to the employee rol.
+_The app allows all the operation from the company, and leaves a register of every operation made. This app also have permissions levels according to the employee rol. The image below is the landing page of the app._
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/rogergarciaz/barranquillita/blob/master/barranquillita.PNG">
+  <img src="https://github.com/rogergarciaz/barranquillita/blob/master/barranquillita.PNG">
 </p>
-
-_The next image is the landing view of the app._
-![barranquillita](https://github.com/rogergarciaz/barranquillita/blob/master/barranquillita.PNG)
 
 
 ## Tools
